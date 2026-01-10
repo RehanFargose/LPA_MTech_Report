@@ -1,0 +1,102 @@
+\chapter{Introduction}{\label{ch:intro}}
+\section{Background and Motivation}
+
+
+Due to the massive Population and issues with corruption, the Indian Judiciary has become woefully inefficient. Since, passing Judgements require one to look for Legal Precedents, the process is slowed down even further. Furthermore, due to the complicate Jargon used in Legal documents, it has often been inaccessible to the general public in India. There were over 44 million pending cases in the Indian courts in 2023\cite{b1}. Hence, there is need for a tool, specifically trained on Indian Legal Corpus that can help improve the efficiency of the Judiciary and also help the public understand the Nuances of the Legal landscape. 
+
+The dataset has been procured from AWS Registry for Indian Supreme court and High Court judgements in the form of court case docs(PDF format) and their associated metadata files(in .json format). These PDFs are then converted into texts, cleaned and their content is mapped to their metadata file to create an Indian Corpus dataset, that consist of the facts in the document. The facts include the IPC codes, Number of Judges, Acts, Disposal nature, Verdict label, etc.
+
+Most of the existing NLP models for Legal Document processing such as LegalBERT, RoBERTA, DistillBERT, etc, are trained either on European, American or Chinese Legal corpus, thus making them difficult for use in the Indian Legal landscape. To combat this, we have proposed the development and design of a \textbf{Legal Precedent Assistant for Indian Judiciary}, focusing on Determining truth from presented evidence, IPC mapping, Summarization and Verdict Prediction.
+
+DAPT (Domain-Adaptive Pre-training) will be used in conjunction with SCM(Similarity Case Matching) and Contrastive learning to train a LegalBERT/Llama model on the Indian Legal Corpus dataset. This model will then be finetuned further for our 5 stated goals. Since, the Indian Legal process is descended from the British Legal system, LegalBERT/Llama could be adapted/transferred from ECHR to IPC; provided we have a substantially large and refined dataset.
+
+The system will take case documents (.pdf, .docx, .txt, etc) as input; convert and clean them into a text files and feed them to the 5 stage system pipeline. The 1st stage will be for Evidence extraction and using the alibis and statements provided by both parties to try and find any contradictions in the case. The 2nd  stage will be for mapping the IPC codes found in the input document. In parallel to IPC mapping, we will also have the 3rd stage which is used to find legal precedents/case law for similar types of cases in the past. The 4th stage will be verdict prediction; to use the mapped IPC codes and additional context extracted from the 1st and 3rd stages, to predict an outcome \cite{b5}; Chance of Appellant/Defendant winning and what the judgement/punishment will be in a short sentence. The 5th and final stage will be to summarize the document in 150 words or less. The 2 Initial stages are aimed towards Legal Professionals, whereas the last stage is primarily for the General public’s understanding. NER for IPC mapping should not be used as Standalone, as Judges utilise more context to Adjudicate for a given circumstance \cite{b3}.
+
+The system can also take in Case documents in Marathi as well as Hindi, however, due to lack of specialized and established models for Indic languages their Prediction and Summarization capabilities would be greatly limited and more raw data and metadata would be required to improve this part of the system.
+
+
+\pagebreak
+
+\section{Problem Statement}
+
+Despite growing interest in Legal NLP, current systems exhibit critical limitations that hinder educational adoption:
+
+\begin{enumerate}
+    \item \textbf{High Computational Costs:} Commercial Legal NLP models, often forego BERT based models and smaller specialized LLMs such as Llama-3-Legal and rely heavily on popular LLMs such as ChatGPT and Gemini, which have exponentially higher compute requirements and concerns related to privacy and data hallucination. BERT and Legal Llama have cost per million tokens ranging from \$0.20 to \$0.80, whereas popular LLMs have a cost ranging from \$2.50 to \$10.
+    
+    \item \textbf{Lack of Datasets:} Most BERT and Llama based Legal models are primarily trained on US and ECHR datasets, due to lack of large scale Indian legal corpus. Thus, there is a need to create datasets for Indian High Courts and District courts.
+    
+    \item \textbf{Lack of Evidence Scrutiny:} Existing Legal models are used primarily for summarization or verdict prediction, they do not have the ability to distinguish between any contradictions based on the provided evidence/alibis and must treat the provided input as facts, which they cannot scrutinize.
+    
+    \item \textbf{Lack of Precedent in Verdict Prediction:} Existing models tend to utilise the statements and acts mentioned in the case documents and map them to IPC and predict a generalized sentence. However, this does not take into account established precedents (case law) for similar cases in the past to provide a verdict more relevant in the current context.
+    
+    \item \textbf{Limited Language Support:} Popular Legal NLP models are based on either English or Mandarin. Indic Language support is exceedingly rare due to the lack of dataset based on Indian legal corpus.
+\end{enumerate}
+
+There exists a clear need for a thorough, multi-purpose, scalable, and ipc-accurate Legal NLP model that bridges the computational overhead gap, scrutinizes presented evidence, finds relevant precedents, supports multiple languages, and provides a framework aligned with judiciary standards—all while maintaining the privacy of both parties and provide a fair verdict.
+
+
+\pagebreak
+\section{Research Objectives}
+
+The primary objective of this project is to design and validate a Legal NLP model that provides verdict prediction, ipc mapping, simplified legal summary, etc using fine tuned legal models and data collected from Bombay HC and various District courts in the state of Maharashtra. The specific research objectives are:
+
+\begin{enumerate}
+    \item \textbf{Legal Dataset Creation:} Develop a dataset of Indian Family courts based on Taluka, District and High court cases. The AWS registry provides Supreme court case documents in abundance, but not for High courts and District courts. The dataset should contain columns such as bench, IPC codes, disposal nature, case duration, verdict, arguments, evidence sections, etc.
+    
+    \item \textbf{Evidence Scrutinization:} Develop a fine-tuned Llama model, that cross-references data and performs a consistency audit on the statements and evidence presented by both sides to detect any contradictions. This will allow the system to determine the truth and provide clear context to help with verdict prediction.
+    
+    \item \textbf{Precedent Search:} Implement Contrastive learning and Similar Case Matching(SCM) to allow the model to find older cases which are similar to the current case, and take into account the context/precedent of older cases while providing a verdict.
+    
+    \item \textbf{IPC Mapping:} Implement NER to extrapolate the IPC applicable to the current case, based on the different sections of evidence, arguments, accusations, etc.
+    
+    \item \textbf{Verdict Prediction:} Predict the verdict while also taking into account Precedents(Case law), IPC mappings and the contradictions found in the evidence.
+    
+    \item \textbf{Legal Document Summarization:} Summarize the case and verdict in 150 words or less, while also eliminating any legal jargon, to make the system’s output more interpretable/accessible.
+    
+\end{enumerate}
+
+\pagebreak
+\section{Scope and Limitations}
+
+\subsection{In Scope}
+The model development encompasses:
+\begin{itemize}
+    \item Dataset building via data collected from District and High courts and filtering based on Family court cases.
+    \item Perform case evidence scrutinization on both sides using Llama for consistency audit to find any contradictions.
+    \item Precedent search via Contrastive learning and Similar Case Matching (SCM).
+    \item IPC mapping using NER via Bi-LSTM encoder/Llama.
+    \item Verdict Prediction using Llama/LegalBERT.
+    \item Summarization using Llama.
+    \item Indic language support limited only to Marathi and Hindi.
+    \item Acts as replacement/tool for of a hired legal assistant.
+\end{itemize}
+
+\subsection{Out of Scope}
+The following are explicitly excluded from the current project phase:
+\begin{itemize}
+    \item No support for other Local languages such as Gujarati, Kannada, Tamil, etc.
+    \item Evidence scrutinization limited only to evidence and case docs provided as input.
+    \item Consistency audit for evidence prone to LLM hallucinations.
+    \item Only focused for Family court, no support for Criminal, Industrial, Copyright proceedings, etc.
+    \item Quality of dataset dependent upon raw data provided by Family/District/High courts.
+    \item Not meant to be used as a replacement for an actual Attorney/Lawyers/Judge.
+    \item Verdict and summary might need to be reviewed, as the sentence passed might not have all the context despite using Precedents.
+    \item The Verdict does not take into account the current financial, personal and other circumstances of individuals involved when passing the sentence.
+\end{itemize}
+
+\section{Research Organization}
+
+The remainder of this document is organized as follows:
+
+\textbf{Chapter~\ref{ch:lit_review} (Literature Review):} Presents a comprehensive synthesis of 23 research papers on Legal NLP models such as BERT, RoBERTa, Distill-BERT, BigBird, Legal-BERT, Legal-Llama, etc, using approaches such as DAPT (Domain Adaptive Pre-Training), Contrastive Learning, SCM (Similar Case Matching), UDA (Unsupervised Data Augmentation), DAM (Dual Attention Mechanism), etc. These existing systems primarily focus on summarizing, predicting verdicts, finding similar cases and named entity recognition (NER). This section includes tabular summary of key findings, gaps, and relevance, followed by systematic gap analysis identifying 15 specific research gaps across hardware, methodology, pedagogy, technical, and regulatory domains.
+
+\textbf{Chapter~\ref{ch:system_analysis} (System Analysis and Design):} Details functional and non-functional requirements derived from gap analysis and educational needs. Presents design alternatives comparison (DAPT+SCM) with justified selections. Includes system architecture, model parameter specifications, operational workflow, and design rationale explicitly mapping technical decisions to research gaps.
+
+\textbf{Chapter~\ref{ch:methodology} (Proposed Methodology):} Outlines six-phase development plan (Dataset building and refinement, Evidence scrutinization, IPC Mapping, Precedent search, Verdict prediction, Summarization) with deliverables, timelines, and evaluation metrics. Defines technical performance benchmarks, user experience measures, testing procedures, and risk mitigation strategies. 
+
+	extbf{References:} Comprehensive bibliography of cited literature using biblatex with consistent IEEE-style formatting.
+
+This structured presentation aims to provide both academic rigor through literature grounding and practical feasibility through detailed technical planning, positioning the project for successful implementation and potential contribution to the Indian legal landscape.
+
+
