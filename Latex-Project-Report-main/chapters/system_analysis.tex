@@ -9,119 +9,118 @@ This chapter presents a comprehensive analysis of requirements, constraints, des
 \section{Requirements Analysis}
 
 \subsection{Functional Requirements}
-Based on the identified research gaps and driving school needs, the system must fulfill the following functional requirements:
+Based on the identified research gaps and Legal professional's needs, the system must fulfill the following functional requirements:
 
-\textbf{FR1: Realistic Vehicle Control Input}
+\textbf{FR1: Legal Document Input}
 \begin{itemize}
-    \item Accept analog steering input with proportional angle mapping (0–900° rotation range)
-    \item Process independent accelerator, brake, and clutch pedal inputs with pressure sensitivity
-    \item Support gear selection for both automatic (P, R, N, D) and manual (1–6, Reverse) transmissions
-    \item Maintain input latency $<$ 50ms to preserve motor skill feedback loop~\cite{Harari2021}
+    \item The legal documents/summaries from both sides should be given as input to the system alongside any pre-existing court judgements/summaries.
+    \item The files can be uploaded as .docx/.pdf/.txt formats.
 \end{itemize}
 
-\textbf{FR2: Immersive Visual and Audio Rendering}
+\textbf{FR2: Text Cleaning and Preprocessing}
 \begin{itemize}
-    \item Deliver stereoscopic 3D rendering at minimum 72 FPS per eye to minimize motion sickness~\cite{Lindal2019,Weidner2017}
-    \item Provide 90–110° field of view matching Meta Quest 3 specifications
-    \item Implement spatial audio with direction-dependent engine sounds, traffic noise, and ambient effects~\cite{GilCarvajal2024}
-    \item Render photorealistic vehicle interiors (dashboard, mirrors, gear shifter) for high-end car models (Mercedes-Benz, BMW, Audi)
+    \item The system pipeline will then use regex/BERT models to remove any unnecessary symbols and patterns to convert the input documents into text files for further processing.
 \end{itemize}
 
-\textbf{FR3: Accurate Vehicle Physics Simulation}
+\textbf{FR3: Evidence Scrutinization}
 \begin{itemize}
-    \item Model realistic acceleration, braking distances, and cornering dynamics based on vehicle mass, tire friction, and road conditions
-    \item Simulate clutch engagement points, gear ratios, and engine stalling for manual transmission training
-    \item Implement collision detection with appropriate force feedback and damage visualization
-    \item Support dynamic weather conditions (rain, fog) affecting visibility and traction
+    \item Llama 3.1 should be used to perform evidence scrutinization and a consistency audit for both sides, to try and determine contradictions in both side’s statements.
 \end{itemize}
 
-\textbf{FR4: Performance Monitoring and Assessment}
+\textbf{FR4: IPC Mapping}
 \begin{itemize}
-    \item Log driving metrics: speed profile, lane deviation, braking smoothness, gear shift timing, steering angle variance
-    \item Generate automated assessment scores based on standardized criteria aligned with RTO testing protocols
-    \item Provide real-time visual/audio feedback for critical errors (e.g., sudden braking, lane violations)
-    \item Export session reports in PDF/CSV format for instructor review
+    \item If the document contains any articles/code/IPC violations they should be tracked either based on the codes or based on statements.
 \end{itemize}
 
-\textbf{FR5: Scenario Management and Curriculum Integration}
+\textbf{FR5: Precedent Retrieval}
 \begin{itemize}
-    \item Offer pre-defined training scenarios: urban roads, highways, parking, emergency braking, obstacle avoidance
-    \item Allow instructor-controlled difficulty adjustment (traffic density, time of day, weather)
-    \item Support session pause/resume and instant replay for error analysis
-    \item Maintain user profiles with progress tracking across multiple sessions
+    \item Match the current court case documents with past similar court cases and find precedents from past judgements to aid in verdict/judgement of present case.
+\end{itemize}
+
+\textbf{FR6: Verdict Prediction}
+\begin{itemize}
+	\item Predict the verdict using the previous 3 requirements.
+
+\end{itemize}
+
+\textbf{FR7: Summarization}
+\begin{itemize}
+	\item •	Summarize the judgement and the case contents in 150 words or less.
+
 \end{itemize}
 
 \subsection{Non-Functional Requirements}
 
 \textbf{NFR1: Cost Effectiveness}
 \begin{itemize}
-    \item Target total system cost $<$ \$5000 (headset + custom hardware + PC) to be affordable for driving schools~\cite{Silvera2022}
-    \item Use consumer-grade components (Meta Quest 3, off-the-shelf sensors, 3D-printable enclosures)
-    \item Minimize recurring costs (no subscription fees for core functionality)
+    \item Make use of freely available datasets and LLM models.
 \end{itemize}
 
 \textbf{NFR2: Usability and Accessibility}
 \begin{itemize}
-    \item Enable setup and calibration within 10 minutes by non-technical driving instructors
-    \item Support adjustable seating position and control placements for users 150–200 cm height
-    \item Provide intuitive UI with minimal learning curve for first-time VR users
-    \item Include safety features: guardian boundary system, emergency stop button, comfort-mode reduced motion
+    \item The system should be easy to use and understand not just for Legal professionals, but also laymen.
 \end{itemize}
 
 \textbf{NFR3: Reliability and Maintainability}
 \begin{itemize}
-    \item Ensure Bluetooth connection stability with automatic reconnection on signal loss
-    \item Design modular hardware allowing component replacement without full system disassembly
-    \item Provide diagnostic logs for troubleshooting connection, calibration, and performance issues
-    \item Support firmware updates via wireless OTA for bug fixes and feature enhancements
+    \item The system should be able to handle any cases in the Family courts domain reliably, and should be maintained and upgraded as per changes in Family law. 
 \end{itemize}
 
-\textbf{NFR4: Scalability and Extensibility}
+\textbf{NFR4: Explainability and Interpretability}
 \begin{itemize}
-    \item Architecture must support addition of new vehicle models, environments, and training scenarios without core code refactoring
-    \item Enable future integration of motion platforms, haptic seats, or force-feedback steering wheels
-    \item Allow deployment on both tethered PC-VR and standalone Quest mode with adjustable graphics fidelity
+    \item The verdicts/judgements/summaries should be explained and sources for precedents should be cited.
 \end{itemize}
+
+\textbf{NFR5:  Scalability and Extensibility}
+\begin{itemize}
+	\item The model should be expandable to other domains such as IP and Copyright laws, Criminal laws, Civil suits, etc.
+\end{itemize}
+
 
 \section{Constraints and Design Trade-offs}
 
 \subsection{Hardware Constraints}
-\textbf{C1: VR Headset Limitations}
+\textbf{C1: GPU requirements}
 \begin{itemize}
-    \item Meta Quest 3 processing power (Snapdragon XR2 Gen 2) limits polygon count and texture resolution in standalone mode
-    \item Trade-off: Prioritize frame rate stability (72 FPS minimum) over ultra-high-resolution textures to prevent motion sickness
-    \item Solution: Implement dynamic LOD (Level of Detail) and occlusion culling; use PC-VR link for high-fidelity scenarios
+    \item The current device uses a Notebook version of GTX 1650 gpu with 4Gb of VRAM.
+    \item This is sufficient to train smaller BERT/LLM models with small batch size but takes longer times and has low efficiency.
+    \item Solution: More advanced GPUs such as RTX series, or Ampere architecture based GPUs might be required based on the dataset procured.
 \end{itemize}
 
-\textbf{C2: Bluetooth Latency and Bandwidth}
+\textbf{C2: VRAM/Memory Requirements}
 \begin{itemize}
-    \item Bluetooth 5.0 offers ~10–30ms latency but is susceptible to interference in crowded 2.4 GHz spectrum
-    \item Trade-off: Accept slight latency increase versus wired connection complexity and user mobility restrictions
-    \item Solution: Use BLE with custom GATT profiles optimized for low-latency HID data; implement USB fallback mode
+    \item The current device; GTX 1650 GPU has 4GB of VRAM, which is sufficient to train small to medium size BERT models provided Batching is used.
+    \item Solution: However, for LLMs like Llama 3 and above, we might require over 12GB of VRAM which is consequently tied to the GPU.
+    \item Solution: If powerful GPUs are not available, we can use CPU RAM as swap space/shared memory given that the project is being run on a Linux kernel.
 \end{itemize}
 
-\textbf{C3: Force Feedback Absence}
-\begin{itemize}
-    \item Custom-built steering wheel lacks motorized force feedback present in high-end simulators ($>$\$10,000)
-    \item Trade-off: Reduced haptic realism versus significant cost savings (force feedback wheels alone cost \$1000–3000)
-    \item Solution: Compensate with visual cues (steering resistance indicator on HUD), audio feedback (tire squeal), and vibrational alerts via Quest 3 controllers
-\end{itemize}
+
+
 
 \subsection{Software and Performance Constraints}
-\textbf{C4: Physics Engine Limitations}
+\textbf{C3: 512 token limit on BERT}
 \begin{itemize}
-    \item Unity/Unreal default vehicle physics are optimized for gaming, not driver training accuracy
-    \item Trade-off: Computational cost of high-fidelity tire models (e.g., Pacejka Magic Formula) versus frame rate
-    \item Solution: Use simplified but validated physics models (mass-spring damper for suspension, friction circles for lateral grip) with parameter tuning from real vehicle data
+    \item LegalBERT and its contemporaries have a strict 512 token limit.
+    \item Solution: This limit can be circumvented by using Sliding sequence window technique.
 \end{itemize}
 
-\textbf{C5: Asset Development Budget}
+\textbf{C4: Overfitting}
 \begin{itemize}
-    \item Photorealistic 3D models of licensed vehicle interiors (Mercedes, BMW) require substantial licensing fees or extensive 3D modeling effort
-    \item Trade-off: Generic high-end vehicle interiors versus brand-specific accuracy
-    \item Solution: Model representative "luxury sedan" interior with adjustable branding overlays; prioritize functional accuracy (control placement, mirror angles) over exact brand aesthetics
+    \item Overfitting happens often due to small size of datasets and low variety in data.
+    \item Solution: Overfitting can be overcome by using DAPT, Contrastive Learning, Regularization and Early stopping.
 \end{itemize}
 
+\textbf{C5: Synthetic Data}
+\begin{itemize}
+	\item Synthetic data can help augment the size and balancer of dataset but can lead to outputs that are not representative of real life scenarios.
+	\item Solution: Use minimal amounts of synthetic data and only for classes that have no instances at all.
+\end{itemize}
+
+\textbf{C6: Closed loop bias}
+\begin{itemize}
+	\item Closed loop bias happens in RAGs and models using Synthetic data as the model reuses its own output for training.
+	\item Solution: Can be overcome by building/acquiring a larger dataset and preventing/minimizing use of model output for training
+\end{itemize}
 \section{Design Alternatives and Justification}
 
 \subsection{VR Platform Selection}
@@ -154,11 +153,11 @@ Based on the identified research gaps and driving school needs, the system must 
 \section{System Objectives}
 Based on the requirements analysis and design trade-offs, the system objectives are:
 \begin{itemize}
-    \item To design a modular VR-based driving simulation environment replicating realistic car control and behavior.
-    \item To integrate Bluetooth-enabled hardware input devices for steering, acceleration, braking, and gear shifting with latency $<$ 50ms.
-    \item To ensure compatibility with the Meta Quest 3 headset (both standalone and PC-VR link modes) for immersive interaction.
-    \item To provide automated performance analytics for driver evaluation and training improvement aligned with RTO assessment criteria.
-    \item To develop a cost-effective solution ($<$\$5000 total) deployable in Indian driving schools with minimal technical infrastructure.
+    \item To design a modular, reliable and explainable Legal Precedent Assistant for Indian Family courts.
+    \item To create a Pipeline that takes court documents from both the opposing sides as inputs, cleans and pre-processes them and passes them to later stages for creating outputs in line with the functional and non-functional requirements.
+    \item To integrate LegalBERT for IPC mapping of any codes/articles/statements found in the input documents as well as retrieving legal precedents from past cases. 
+    \item To integrate Llama 3 for evidence scrutinization, verdict prediction and summarization of given court documents.
+    \item To create a system that can be transferred between different legal domains and not be constrained to just Family courts.
 \end{itemize}
 
 \section{Comparative Analysis with Existing Solutions}
@@ -172,72 +171,70 @@ Table~\ref{tab:comparative_analysis} compares the proposed system against existi
 \small
 \begin{tabular}{|p{3cm}|p{2.2cm}|p{2.2cm}|p{2.2cm}|p{2.2cm}|}
 \hline
-\textbf{Parameter} & \textbf{Proposed System} & \textbf{DReyeVR~\cite{Silvera2022}} & \textbf{Commercial Racing Sim} & \textbf{Traditional Simulator} \\ \hline
-Cost & $<$\$5000 & $<$\$5000 & \$15,000–50,000 & \$30,000–100,000 \\ \hline
-VR Platform & Meta Quest 3 (wireless) & Various HMDs (tethered) & Valve Index/Varjo (tethered) & Projector/screens (no VR) \\ \hline
-Force Feedback & No (visual/audio cues) & Optional & Yes (high-fidelity) & Yes (hydraulic) \\ \hline
-Dual Transmission & Yes (auto + manual) & No & Manual only & Manual only \\ \hline
-Bluetooth Controls & Yes (custom ESP32) & No (USB) & No (proprietary) & Wired industrial \\ \hline
-Target Users & Driving schools/learners & Researchers & Racing enthusiasts & Commercial training \\ \hline
-Deployment & Standalone + PC-VR & PC-VR only & PC-VR only & Fixed installation \\ \hline
+\textbf{Parameter} & \textbf{Proposed System} & \textbf{Legal-RAG \cite{b20}} & \textbf{Keynote-AI \cite{b15}} & \textbf{JurisCTC \cite{b14}} \\ \hline
+
+Cost & NA & NA & NA & \$30 Million \\ \hline
+
+Model/Framework & Llama 3 and Legal-BERT via DAPT & Llama 3 and RAG & BERT and DAPT & Adversarial BERT and UDA \\ \hline
+
+Target Audience & Professionals and Laymen & Legal Professionals & Legal Professionals & Legal Professionals \\ \hline
+
+Customizability & High & Low & High & High \\ \hline
+
+Domain Transferability & High & Low & High & Medium \\ \hline
+
+Interpretability & Low & Low & Low & Low \\ \hline
+
+Language & English, Marathi, Hindi & Bangla, Arabic & Swedish, English, Norwegian & Mandarin \\ \hline
+
 Customizability & High (modular design) & High (open-source) & Low (proprietary) & Low (vendor lock-in) \\ \hline
+
 Regulatory Focus & RTO-aligned metrics & Research protocols & Entertainment & Commercial licensing \\ \hline
+
 \end{tabular}
 \end{table}
 
 \textbf{Key Differentiators:}
 \begin{itemize}
-    \item \textbf{Affordability:} Matches research systems but undercuts commercial solutions by 70–90\%, addressing Gap 1 from Section~\ref{sec:gap_analysis}.
-    \item \textbf{Wireless Operation:} Only solution offering Bluetooth controls with Quest 3 standalone mode, enhancing portability (Gap 2).
-    \item \textbf{Dual-Mode Transmission:} Uniquely supports both automatic and manual training in single platform (Gap 3).
-    \item \textbf{Educational Focus:} Prioritizes driver training outcomes over entertainment, with RTO-compatible assessment (Gap 7, Gap 13).
+    \item \textbf{Affordability:} More afforadble as compared to professionally built systems.
+    \item \textbf{Domain Specific:} One of the only LLMs that focuses on Indian Family courts data.
+    \item \textbf{Transferrability:} Due to DAPT on Indian corpora, can be transferred to other court domains under Indian jurisdiction.
+    \item \textbf{Accessibility:} Summarization module helps general public understand legal jargon by simplifying it.
 \end{itemize}
 
 \section{System Components and Architecture}
 
-The proposed system architecture consists of three tightly integrated subsystems designed to address the functional requirements while respecting the identified constraints.
+The proposed system architecture consists of two integrated subsystems designed to address the functional requirements while respecting the identified constraints.
 
-\subsection{Hardware Interface Subsystem}
+\subsection{Hardware Subsystem}
 The physical control setup comprises:
 \begin{itemize}
-    \item \textbf{Steering Wheel Assembly:} Salvaged automotive steering wheel fitted with AS5600 magnetic rotary encoder (12-bit resolution, 4096 steps per revolution) providing 0.088° angular precision. Mounted on ball bearing hub for smooth 900° rotation range.
-    \item \textbf{Pedal Set:} Three independent pedals (accelerator, brake, clutch) using FSR (Force Sensitive Resistor) sensors with 10-bit ADC conversion. Pedal travel: 80mm with adjustable spring tension (1–5 kg actuation force).
-    \item \textbf{Gear Shifter:} H-pattern mechanical shifter with hall-effect sensors at each gate position (1–6, R, N). Alternative: Sequential paddle shifters for automatic mode (+ / - buttons).
-    \item \textbf{Microcontroller:} ESP32-WROOM-32 with Bluetooth 5.0 LE, dual-core 240 MHz processor, 16 analog input channels. Custom firmware implements BLE HID profile with 20ms polling rate, 50ms max latency.
-    \item \textbf{Power Supply:} Rechargeable 18650 Li-ion battery pack (3000 mAh) providing 8–12 hours continuous operation. USB-C charging with power management IC.
+    \item \textbf{CPU:} Any processors such as intel i5/i7 12th gen and above or Ryzen 5/7 are usable.
+    \item \textbf{GPU:} GTX 1650 or higher. RTX series GPUs with 12 GB VRAM or higher are preferred.
+    \item \textbf{VRAM:} 4GB and higher.
 \end{itemize}
 
-Connected via Bluetooth or USB-C (fallback mode) to the VR headset or PC.
 
-\subsection{Software Simulation Subsystem}
-Developed in Unity 2023 LTS with the following modules:
+
+\subsection{Software  Subsystem}
+
 \begin{itemize}
-    \item \textbf{Input Manager:} Receives Bluetooth/USB HID data, applies calibration curves, dead-zone filtering, and maps to vehicle control parameters.
-    \item \textbf{Vehicle Physics Engine:} Custom implementation based on Edy's Vehicle Physics Pro, modeling 6-DOF rigid body dynamics, tire slip curves (simplified Pacejka), differential gearing, and clutch engagement.
-    \item \textbf{Environment Renderer:} Procedural city generation (Urban Traffic Simulator asset) + hand-crafted scenarios. Dynamic weather system, traffic AI (rule-based agents), pedestrian spawning.
-    \item \textbf{Assessment Module:} Real-time metric calculation (speed compliance, lane center offset, braking jerk, gear shift timing). Event logging to SQLite database. Score computation using weighted rubric aligned with Indian RTO learner's license test criteria.
-    \item \textbf{VR Interaction:} XR Interaction Toolkit for head tracking, hand controllers (menu navigation), spatial audio (FMOD), comfort features (vignetting, snap-turn option).
+    \item \textbf{Python 3.10:} Stable version with long term support and compatible with most hardware.
+    \item \textbf{PyTorch CUDA:} For parallel computing to improve training and dataset pre-processing efficiency.
+    \item \textbf{Legal-BERT: } For initial stages of the system such as IPC/sections mapping, Precedent finding, etc.
+    \item \textbf{Llama 3:} For more complex stages such as Evidence scrutinization, Summarization, and Verdict prediction.
 \end{itemize}
 
-\subsection{VR Interface Subsystem}
-Meta Quest 3 headset provides:
-\begin{itemize}
-    \item \textbf{Head Tracking:} 6-DOF inside-out tracking via four IR cameras, <10ms motion-to-photon latency.
-    \item \textbf{Stereoscopic Rendering:} Dual 2064×2208 LCD panels per eye, 90 Hz refresh rate, 110° horizontal FOV.
-    \item \textbf{Spatial Audio:} Integrated speakers with 3D positional audio (Unity Audio Spatializer).
-    \item \textbf{Passthrough AR:} Color passthrough cameras enabling safe guardian setup and real-world awareness during breaks.
-\end{itemize}
 
-Deployment modes: (1) Standalone (Quest 3 native), (2) PC-VR Link (via USB-C or Air Link wireless streaming).
 
 \section{System Architecture Diagram}
 
-Figure~\ref{fig:system_architecture} illustrates the data flow and component interactions within the integrated VR driving simulator system.
+Figure~\ref{fig:system_architecture} illustrates the data flow and component interactions within the LPA system.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{figs/system_architecture.pdf}
-    \caption{System architecture showing data flow from hardware inputs through simulation engine to VR rendering and assessment output. Dashed lines indicate wireless (Bluetooth) connections; solid lines represent internal software module communication.}
+    \caption{System architecture showing data flow from input documents through pre-processing/cleaning stages to contextual extraction and analysis stages.}
     \label{fig:system_architecture}
 \end{figure}
 
