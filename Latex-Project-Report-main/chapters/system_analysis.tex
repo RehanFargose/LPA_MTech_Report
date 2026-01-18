@@ -121,34 +121,36 @@ Based on the identified research gaps and Legal professional's needs, the system
 	\item Closed loop bias happens in RAGs and models using Synthetic data as the model reuses its own output for training.
 	\item Solution: Can be overcome by building/acquiring a larger dataset and preventing/minimizing use of model output for training
 \end{itemize}
-\section{Design Alternatives and Justification}
 
-\subsection{VR Platform Selection}
-\textbf{Alternatives Considered:}
-\begin{enumerate}
-    \item \textbf{Valve Index + PC:} Pros: Superior FOV (130°), refresh rate (144 Hz), force feedback support. Cons: High cost (\$1000 headset + \$1500 PC), wired tethering limits mobility.
-    \item \textbf{Meta Quest 3:} Pros: Wireless standalone mode, affordable (\$500), inside-out tracking, passthrough AR. Cons: Lower processing power, 90 Hz max refresh rate.
-    \item \textbf{PSVR2 + PlayStation 5:} Pros: Affordable (\$1000 total), haptic feedback in controllers. Cons: Closed ecosystem, limited development flexibility.
-\end{enumerate}
-\textbf{Selected: Meta Quest 3} — Justification: Best balance of cost, wireless freedom, and developer accessibility. Supports both standalone (for basic scenarios) and PC-VR link (for advanced training), aligning with NFR1 and NFR4.
+\newpage
 
-\subsection{Game Engine Selection}
-\textbf{Alternatives Considered:}
-\begin{enumerate}
-    \item \textbf{Unity:} Pros: Extensive VR support (XR Interaction Toolkit), large asset store, C\# scripting familiarity. Cons: Less advanced default vehicle physics.
-    \item \textbf{Unreal Engine:} Pros: Superior graphics (Nanite, Lumen), Blueprint visual scripting, Chaos vehicle physics. Cons: Steeper learning curve, larger build sizes.
-    \item \textbf{CARLA Simulator:} Pros: Open-source, designed for autonomous driving research, pre-built urban environments~\cite{Silvera2022}. Cons: Primarily Python-based, limited VR headset support, requires significant C++ customization.
-\end{enumerate}
-\textbf{Selected: Unity 6 (Latest LTS)} — Justification: Unity 6 represents the latest stable release with improved rendering performance, enhanced XR support, and better mobile optimization for Quest 3. Faster prototyping compared to Unreal, proven VR deployment pipeline, extensive asset store ecosystem, and active developer community. Vehicle physics will be enhanced with custom scripts or third-party assets (e.g., Edy's Vehicle Physics, Realistic Car Controller). Unity's C\# scripting environment also facilitates Bluetooth integration via Android native plugins.
-
-\subsection{Control Input Architecture}
-\textbf{Alternatives Considered:}
-\begin{enumerate}
-    \item \textbf{Custom PCB with USB HID:} Pros: Lowest latency (<5ms), plug-and-play compatibility. Cons: Wired connection reduces user comfort, cable management complexity.
-    \item \textbf{ESP32 Bluetooth LE:} Pros: Wireless, low power, supports custom GATT profiles, affordable (\$10–20 per unit). Cons: 10–30ms latency, potential interference.
-    \item \textbf{Commercial Racing Wheel (Logitech G29):} Pros: Ready-made, force feedback included. Cons: Expensive (\$300–400), fixed form factor unsuitable for driving school setup, limited customization.
-\end{enumerate}
-\textbf{Selected: ESP32 BLE with USB Fallback} — Justification: Wireless operation enhances user experience (NFR2), modular design allows independent sensor upgrades (NFR3), and USB mode ensures reliability during demonstrations or competitions. Custom firmware enables latency optimization (<20ms achievable).
+%\section{Design Alternatives and Justification}
+%\subsection{VR Platform Selection}
+%\textbf{Alternatives Considered:}
+%\begin{enumerate}
+%    \item \textbf{Valve Index + PC:} Pros: Superior FOV (130°), refresh rate (144 Hz), force feedback support. Cons: High cost (\$1000 headset + \$1500 PC), wired tethering limits mobility.
+%    \item \textbf{Meta Quest 3:} Pros: Wireless standalone mode, affordable (\$500), inside-out tracking, passthrough AR. Cons: Lower processing power, 90 Hz max refresh rate.
+%    \item \textbf{PSVR2 + PlayStation 5:} Pros: Affordable (\$1000 total), haptic feedback in controllers. Cons: Closed ecosystem, limited development flexibility.
+%\end{enumerate}
+%\textbf{Selected: Meta Quest 3} — Justification: Best balance of cost, wireless freedom, and developer accessibility. Supports both standalone (for basic scenarios) and PC-VR link (for advanced training), aligning with NFR1 and NFR4.
+%
+%\subsection{Game Engine Selection}
+%\textbf{Alternatives Considered:}
+%\begin{enumerate}
+%    \item \textbf{Unity:} Pros: Extensive VR support (XR Interaction Toolkit), large asset store, C\# scripting familiarity. Cons: Less advanced default vehicle physics.
+%    \item \textbf{Unreal Engine:} Pros: Superior graphics (Nanite, Lumen), Blueprint visual scripting, Chaos vehicle physics. Cons: Steeper learning curve, larger build sizes.
+%    \item \textbf{CARLA Simulator:} Pros: Open-source, designed for autonomous driving research, pre-built urban environments~\cite{Silvera2022}. Cons: Primarily Python-based, limited VR headset support, requires significant C++ customization.
+%\end{enumerate}
+%\textbf{Selected: Unity 6 (Latest LTS)} — Justification: Unity 6 represents the latest stable release with improved rendering performance, enhanced XR support, and better mobile optimization for Quest 3. Faster prototyping compared to Unreal, proven VR deployment pipeline, extensive asset store ecosystem, and active developer community. Vehicle physics will be enhanced with custom scripts or third-party assets (e.g., Edy's Vehicle Physics, Realistic Car Controller). Unity's C\# scripting environment also facilitates Bluetooth integration via Android native plugins.
+%
+%\subsection{Control Input Architecture}
+%\textbf{Alternatives Considered:}
+%\begin{enumerate}
+%    \item \textbf{Custom PCB with USB HID:} Pros: Lowest latency (<5ms), plug-and-play compatibility. Cons: Wired connection reduces user comfort, cable management complexity.
+%    \item \textbf{ESP32 Bluetooth LE:} Pros: Wireless, low power, supports custom GATT profiles, affordable (\$10–20 per unit). Cons: 10–30ms latency, potential interference.
+%    \item \textbf{Commercial Racing Wheel (Logitech G29):} Pros: Ready-made, force feedback included. Cons: Expensive (\$300–400), fixed form factor unsuitable for driving school setup, limited customization.
+%\end{enumerate}
+%\textbf{Selected: ESP32 BLE with USB Fallback} — Justification: Wireless operation enhances user experience (NFR2), modular design allows independent sensor upgrades (NFR3), and USB mode ensures reliability during demonstrations or competitions. Custom firmware enables latency optimization (<20ms achievable).
 
 \section{System Objectives}
 Based on the requirements analysis and design trade-offs, the system objectives are:
@@ -160,6 +162,7 @@ Based on the requirements analysis and design trade-offs, the system objectives 
     \item To create a system that can be transferred between different legal domains and not be constrained to just Family courts.
 \end{itemize}
 
+\newpage
 \section{Comparative Analysis with Existing Solutions}
 
 Table~\ref{tab:comparative_analysis} compares the proposed system against existing commercial and research VR driving simulators based on key design parameters derived from the requirements analysis.
@@ -202,6 +205,8 @@ Regulatory Focus & RTO-aligned metrics & Research protocols & Entertainment & Co
     \item \textbf{Accessibility:} Summarization module helps general public understand legal jargon by simplifying it.
 \end{itemize}
 
+\newpage
+
 \section{System Components and Architecture}
 
 The proposed system architecture consists of two integrated subsystems designed to address the functional requirements while respecting the identified constraints.
@@ -227,38 +232,41 @@ The physical control setup comprises:
 
 
 
+\newpage
+
 \section{System Architecture Diagram}
 
 Figure~\ref{fig:system_architecture} illustrates the data flow and component interactions within the LPA system.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\textwidth]{figs/system_architecture.pdf}
+    \includegraphics[width=0.6\textwidth]{figs/system_architecture.pdf}
     \caption{System architecture showing data flow from input documents through pre-processing/cleaning stages to contextual extraction and analysis stages.}
     \label{fig:system_architecture}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{figs/model_diagram.pdf}
-    \caption{System model diagram illustrating the conceptual architecture and relationships between core system components.}
-    \label{fig:model_diagram}
-\end{figure}
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.95\textwidth]{figs/model_diagram.pdf}
+%    \caption{System model diagram illustrating the conceptual architecture and relationships between core system components.}
+%    \label{fig:model_diagram}
+%\end{figure}
 
 \section{Design Rationale Summary}
 
 The design decisions documented in this chapter directly address the research gaps identified in Section~\ref{sec:gap_analysis}:
 
 \begin{itemize}
-    \item \textbf{Gap 1 (Affordable Hardware):} ESP32-based custom controls + Meta Quest 3 + consumer PC achieves $<$\$5000 total cost while maintaining training-grade fidelity.
-    \item \textbf{Gap 2 (Wireless Integration):} Bluetooth LE with optimized firmware ensures <50ms latency, eliminating cable management issues and enhancing user mobility.
-    \item \textbf{Gap 3 (Dual Transmission):} Modular gear shifter design + software physics support both automatic and manual modes without hardware swapping.
-    \item \textbf{Gap 7 (Standardized Assessment):} Custom assessment module implements RTO learner's test criteria (speed limits, lane discipline, signal compliance) with automated scoring.
-    \item \textbf{Gap 10 (Photorealistic Rendering):} Unity 2023 HDRP + optimized assets provide luxury vehicle interiors with realistic dashboards, mirrors, and environmental detail within Quest 3 performance constraints.
-    \item \textbf{Gap 13 (Regulatory Alignment):} Data logging format and assessment rubrics designed for future submission to Indian RTO authorities as validation evidence for VR training hour equivalency.
+    \item \textbf{Gap 1 (Localized Context)} By training specifically on the Indian Legal Corpus (ILC) and incorporating IPC-specific logic, the model overcomes the "Geographic Bias" of existing systems that rely solely on US, EU, or Chinese legal data.
+    \item \textbf{Gap 2 (Long Document Handling):} The implementation of Hierarchical Transformers (or sliding-window techniques) directly addresses the 512-token limit of standard BERT models, allowing for the processing of verbose Indian High Court and Supreme Court judgments.
+    \item \textbf{Gap 4 (Resource Efficiency):} The use of Domain Adaptive Pre-Training (DAPT) on specialized legal data ensures that the model achieves high F1 gains (up to 18.2\%) while remaining computationally lighter and more affordable than massive, general-purpose LLMs.
+    \item \textbf{Gap 5 (Multi-task Integration):} The architecture combines Verdict Prediction, Case Summarization, and Statute Identification into a single pipeline, solving the limitation of fragmented systems that focus only on isolated subtasks like charge prediction.
+    \item \textbf{Gap 6 (Semantic Accuracy): }  By utilizing LegalBERT and Dual-Attention mechanisms, the system captures complex legal jargon and intra-sentence relationships that traditional "Bag of Words" or basic frequency models fail to retrieve.
 \end{itemize}
 
 The comparative analysis (Table~\ref{tab:comparative_analysis}) demonstrates that this design occupies a unique position: research-grade flexibility at commercial-training affordability, specifically tailored for the Indian driving school market.
+
+\newpage
 
 \section{Workflow and Operational Flow}
 The workflow diagram (Figure~\ref{fig:workflow}) shows the sequential process of system operation—from initialization through user interaction to post-session evaluation—illustrating how the system supports a complete training cycle.
@@ -272,200 +280,251 @@ The workflow diagram (Figure~\ref{fig:workflow}) shows the sequential process of
 
 \subsection{Detailed Functional Flow}
 \begin{enumerate}
-    \item \textbf{Pre-Session Setup (2–5 minutes):}
-    \begin{itemize}
-        \item Instructor selects trainee profile, training scenario (e.g., "Urban Basics: Lane Keeping"), vehicle type (automatic/manual), and difficulty level.
-        \item Trainee dons Quest 3 headset; system initiates guardian boundary setup and comfort calibration (IPD adjustment, brightness).
-        \item Hardware connection handshake: Steering wheel, pedals, and shifter auto-pair via Bluetooth; system runs diagnostic check (sensor ranges, battery level).
-        \item Virtual environment loads: vehicle spawns at scenario starting position; HUD displays initial instructions ("Adjust seat, check mirrors, fasten seatbelt").
-    \end{itemize}
-    
-    \item \textbf{Simulation Loop (15–30 minutes typical session):}
-    \begin{itemize}
-        \item \textbf{Input Capture (20 Hz):} ESP32 samples sensors (steering angle, pedal positions, gear state) → transmits via BLE HID packets.
-        \item \textbf{Physics Update (60 Hz):} Unity's FixedUpdate applies forces to vehicle rigidbody based on input → calculates acceleration, tire slip, suspension compression.
-        \item \textbf{Collision \& Traffic AI (30 Hz):} Raycast-based collision detection; traffic agents follow waypoint paths with lane-change logic; pedestrians obey traffic signals.
-        \item \textbf{Rendering (90 Hz):} Stereoscopic camera renders scene from driver's viewpoint → foveated rendering reduces peripheral detail → Quest 3 displays frames.
-        \item \textbf{Audio Spatialization (60 Hz):} FMOD calculates 3D engine sound (RPM-dependent), tire squeal (slip-dependent), horn/indicator clicks → Quest 3 speakers.
-        \item \textbf{Real-time Assessment:} Background thread logs events (speed violations, lane crossings, harsh braking) → updates live feedback HUD (color-coded indicators).
-    \end{itemize}
-    
-    \item \textbf{Event Handling:}
-    \begin{itemize}
-        \item \textbf{Scenario Triggers:} Dynamic events (e.g., pedestrian crossing, traffic light change, obstacle ahead) triggered based on trainee progress checkpoints.
-        \item \textbf{Instructor Override:} Wireless tablet interface allows real-time weather change, traffic density adjustment, or scenario pause for coaching feedback.
-        \item \textbf{Comfort Monitoring:} Optional: Detect prolonged stationary gaze (potential nausea indicator) → suggest break.
-    \end{itemize}
-    
-    \item \textbf{Session Termination:}
-    \begin{itemize}
-        \item Trainee completes scenario objectives (e.g., reaches destination) OR instructor manually ends session OR safety timeout (30-min VR exposure limit).
-        \item System saves session data: timestamped input logs, trajectory GPS coordinates, metric summaries.
-    \end{itemize}
-    
-    \item \textbf{Post-Session Assessment (2 minutes):}
-    \begin{itemize}
-        \item Assessment module computes scores: (1) Speed Compliance (85/100), (2) Lane Discipline (78/100), (3) Smooth Braking (92/100), (4) Gear Shifting (Manual only, 88/100), (5) Observation (mirror checks, 70/100).
-        \item Generates PDF report with score breakdown, heatmap of violations on route map, improvement suggestions.
-        \item Updates trainee profile: increments training hours, marks scenario as "Passed" (if overall $>$ 75\%) or "Retry Recommended."
-        \item Instructor reviews report with trainee; schedules follow-up session or progresses to advanced scenarios.
-    \end{itemize}
+	\item \textbf{Case Ingestion \& Setup (1--2 minutes):}
+	\begin{itemize}
+		\item User uploads case documents from both parties (petitions, replies, affidavits, evidence PDFs).
+		\item System validates document types, court metadata, and case category (e.g., family matter).
+		\item Documents are indexed and assigned a unique case ID for tracking across pipeline stages.
+	\end{itemize}
+	
+	\item \textbf{Text Extraction \& Pre-processing:}
+	\begin{itemize}
+		\item PDFs are parsed using Fitz to extract raw text from judgments and evidence.
+		\item Text is cleaned (noise removal, normalization) and segmented into logical units (facts, arguments, evidence).
+		\item Legal-BERT based NER identifies legal entities such as parties, dates, IPC sections, and acts.
+	\end{itemize}
+	
+	\item \textbf{Evidence Scrutinization \& Truth Scoring:}
+	\begin{itemize}
+		\item Evidence statements from both sides are analyzed for contradictions and inconsistencies.
+		\item LLaMA 3 performs a consistency audit to evaluate logical coherence across claims.
+		\item Each evidence block is assigned a normalized truth score based on contradiction severity.
+	\end{itemize}
+	
+	\item \textbf{IPC / Section Mapping:}
+	\begin{itemize}
+		\item Cleaned and truth-weighted text is passed to Legal-BERT for legal provision classification.
+		\item Relevant IPC sections and statutory provisions are identified and stored.
+		\item Mapped sections are linked with supporting evidence for downstream reasoning.
+	\end{itemize}
+	
+	\item \textbf{Precedent Retrieval:}
+	\begin{itemize}
+		\item Case embeddings are generated using Legal-BERT.
+		\item Similar Case Matching (SCM) retrieves precedent judgments with analogous fact patterns.
+		\item Retrieved precedents are ranked by contextual similarity and relevance of applied sections.
+	\end{itemize}
+	
+	\item \textbf{Verdict \& Sentence Prediction:}
+	\begin{itemize}
+		\item LLaMA 3 consumes case facts, truth scores, mapped sections, and precedents.
+		\item System predicts likely verdict outcome (e.g., Allowed / Dismissed) and probable sentence or relief.
+	\end{itemize}
+	
+	\item \textbf{Summarization \& Output Generation:}
+	\begin{itemize}
+		\item Predicted verdict and reasoning are simplified using LLaMA 3.
+		\item Legal jargon is minimized to produce a concise summary under 150 words.
+		\item Final output includes verdict prediction, key reasoning points, and applicable legal sections.
+	\end{itemize}
 \end{enumerate}
 
+
+
+
+\newpage
 \section{Feasibility Study}
 
-A comprehensive feasibility analysis is essential to validate the viability of the VR Driving Simulator project across technical, economic, operational, and schedule dimensions. This section systematically evaluates each feasibility aspect to establish project confidence and identify potential risk mitigation strategies.
+A comprehensive feasibility analysis is essential to validate the viability of the LPA for Indian Family courts project across technical, schedule and other dimensions. This section systematically evaluates each feasibility aspect to establish project confidence and identify potential risk mitigation strategies.
 
 \subsection{Technical Feasibility}
-
-\textbf{Hardware Capabilities and Limitations:}
-The project relies on consumer-grade VR hardware (Meta Quest 3) and custom Bluetooth control assemblies. Technical feasibility is high given the following established capabilities:
-
-\begin{itemize}
-    \item \textbf{VR Headset Performance:} Meta Quest 3 offers 90--120 Hz refresh rates, 2064×2208 pixels per eye, and inside-out tracking with sub-millimeter accuracy. These specifications meet the minimum requirements for comfortable, immersive driving simulation~\cite{Lindal2019,Weidner2017}. The standalone architecture eliminates PC tethering constraints, enhancing portability for driving school deployments.
-    
-    \item \textbf{Bluetooth Control Latency:} ESP32 microcontroller with BLE 5.0 achieves input-to-response latency of 30--50ms in controlled tests. While this marginally exceeds the 20ms ideal threshold for high-fidelity force feedback systems~\cite{Harari2021}, it remains within acceptable bounds for educational driving training where reaction time is less critical than in competitive racing scenarios. Mitigation strategies include predictive input smoothing and local sensor fusion on the ESP32 to reduce jitter.
-    
-    \item \textbf{Physics Simulation Complexity:} Unity's built-in physics engine (PhysX) supports realistic vehicle dynamics at 60 Hz fixed timestep. Custom wheel collider scripts can model differential torque, suspension travel, and tire slip based on Pacejka tire models. Benchmark tests on similar projects~\cite{Silvera2022} demonstrate that mid-range desktop GPUs (RTX 3060 equivalent) can maintain 90 FPS stereoscopic rendering with 20--30 dynamic traffic agents, meeting real-time performance targets.
-    
-    \item \textbf{Integration Challenges:} Cross-platform compatibility between Quest 3 (Android-based) and Unity (Windows development environment) requires careful build configuration. Oculus Integration SDK and XR Plugin Management provide mature toolchains with extensive documentation. Initial prototyping confirms successful BLE pairing and input mapping via Unity Input System without major technical blockers.
-\end{itemize}
-
-\textbf{Risk Assessment:} Technical risks are low to moderate. The primary concern is sustained 90 FPS performance under complex scenarios (heavy rain, dense urban traffic). Mitigation involves progressive scene optimization (occlusion culling, LOD models, asynchronous asset loading) and adaptive quality settings based on real-time frame rate monitoring.
-
-\subsection{Economic Feasibility}
-
-\textbf{Cost-Benefit Analysis:}
-Economic viability is evaluated by comparing development and deployment costs against projected benefits for driving school adoption.
-
-\textbf{Development Costs (One-Time):}
-\begin{itemize}
-    \item \textbf{Hardware Prototyping:} Steering wheel assembly (₹8,000), pedals with load cells (₹6,000), gear shifter (₹4,000), ESP32 dev boards and sensors (₹3,000), miscellaneous components (₹4,000). \textit{Total: ₹25,000 (\$300 USD)}.
-    
-    \item \textbf{VR Headset:} Meta Quest 3 (128 GB): ₹50,000 (\$600 USD).
-    
-    \item \textbf{Software Licenses:} Unity Pro annual license (₹15,000/\$180 USD for educational discount), FMOD audio middleware (free for indie projects $<$\$500K revenue), 3D asset packs (vehicles, environments: ₹20,000/\$240 USD from Unity Asset Store).
-    
-    \item \textbf{Development Labor:} Estimated 6 months at 20 hours/week for a 3-member student team (unfunded academic project; opportunity cost estimated at ₹1,20,000 based on typical internship stipends).
-    
-    \item \textbf{Grand Total (Development):} ₹2,30,000 (\$2,760 USD).
-\end{itemize}
-
-\textbf{Per-Unit Deployment Cost (Driving School):}
-\begin{itemize}
-    \item Hardware replication: ₹25,000 (controls) + ₹50,000 (Quest 3) = ₹75,000 (\$900 USD).
-    \item Software licensing: One-time purchase of simulator app (proposed ₹10,000/\$120 USD per station if commercialized) or open-source distribution (₹0 for academic release~\cite{Silvera2022}).
-    \item \textbf{Total per Station:} ₹85,000 (\$1,020 USD) for commercial model; ₹75,000 (\$900 USD) for open-source adoption.
-\end{itemize}
-
-\textbf{Comparative Economics:}
-Traditional commercial driving simulators cost ₹15,00,000--₹50,00,000 (\$18,000--\$60,000 USD) per unit. The proposed system achieves \textbf{85--95\% cost reduction} while maintaining educational effectiveness~\cite{He2022}. Break-even analysis for a driving school operating 5 training stations:
-\begin{itemize}
-    \item Traditional simulator investment: ₹75,00,000 (\$90,000 USD).
-    \item Proposed VR simulator investment: ₹4,25,000 (\$5,100 USD).
-    \item \textbf{Savings: ₹70,75,000 (\$84,900 USD)} — sufficient to fund 100+ learner enrollments.
-\end{itemize}
-
-\textbf{Return on Investment (ROI):}
-Assuming a driving school charges ₹500 (\$6 USD) per VR training hour and operates each station 6 hours/day × 25 days/month:
-\begin{itemize}
-    \item Monthly revenue per station: ₹75,000 (\$900 USD).
-    \item ROI period: ₹85,000 ÷ ₹75,000 ≈ \textbf{1.2 months}.
-\end{itemize}
-
-\textbf{Economic Verdict:} Highly feasible. Low capital expenditure, rapid payback period, and significant cost advantage over alternatives strongly favor economic viability. Scalability to multiple driving schools amplifies impact.
-
-\subsection{Operational Feasibility}
-
-\textbf{User Acceptance and Usability:}
-Operational success depends on instructor and learner acceptance, ease of use, and integration into existing curricula.
+\textbf{System Capabilities and Constraints:}
+The proposed Legal Precedent Assistant is technically feasible using current NLP models, open-source legal datasets, and commodity compute resources. The system design leverages mature transformer-based architectures and scalable retrieval techniques, as outlined below:
 
 \begin{itemize}
-    \item \textbf{Instructor Training:} System requires 2--3 hour onboarding session covering scenario configuration, assessment report interpretation, and hardware troubleshooting. User interface designed for non-technical users (tablet-based instructor panel with drag-and-drop scenario builder). Pilot testing at VJTI's automotive engineering lab confirms instructors can operate independently after minimal training.
-    
-    \item \textbf{Learner Comfort:} VR adoption hinges on minimizing motion sickness. Comfort protocols include: (1) 30-minute session limits with 10-minute breaks~\cite{Lindal2019}, (2) gradual VR exposure (start with stationary scenarios before moving to dynamic driving), (3) adjustable comfort settings (reduced FOV, teleportation mode for extreme discomfort cases). Pre-pilot surveys indicate 78\% of participants report "comfortable" or "very comfortable" experiences after 20-minute sessions.
-    
-    \item \textbf{Curriculum Integration:} System aligns with Indian RTO learning license syllabus: vehicle controls, traffic rules, road signs, parking maneuvers. Instructors can map VR scenarios to lesson plans (e.g., Week 2: Urban Lane Discipline → VR Scenario: "Mumbai Suburban Roads"). Session logs export to Excel/PDF for record-keeping compliance.
-    
-    \item \textbf{Maintenance and Support:} Hardware durability tested for 100+ hours continuous use without component failure. Bluetooth pairing issues resolved via documented reconnection protocol (manual mode fallback until firmware update). Software updates pushed via Unity Cloud Build; instructors notified via in-app prompts.
+	\item \textbf{Document Processing and Text Extraction:} 
+	Judicial documents are primarily available as digitally generated or scanned PDFs. The Fitz (PyMuPDF) library provides reliable text extraction with low overhead, while preprocessing pipelines (normalization, segmentation) are computationally lightweight. Empirical benchmarks show that batch processing of court judgments can be performed efficiently on standard CPU-based systems without GPU acceleration.
+	
+	\item \textbf{Legal Entity Recognition and IPC Mapping:}
+	Legal-BERT, pre-trained on Indian legal corpora, is well-suited for named entity recognition and statutory provision classification. Fine-tuned models can accurately identify IPC sections, party names, and legal references with acceptable inference latency. Since inference is performed offline or asynchronously, real-time constraints are minimal.
+	
+	\item \textbf{Evidence Scrutinization and Reasoning:}
+	Contradiction detection and consistency auditing using LLaMA 3 are computationally intensive but feasible under a controlled pipeline. The system operates on segmented evidence blocks rather than full documents, significantly reducing token length and inference cost. Truth scoring is heuristic-assisted, avoiding strict logical proof requirements while maintaining interpretability.
+	
+	\item \textbf{Precedent Retrieval and Similar Case Matching:}
+	Precedent retrieval is implemented using embedding-based Similar Case Matching (SCM). Legal-BERT embeddings stored in vector databases enable fast approximate nearest neighbor search even for large precedent collections. This approach scales linearly with data size and has been validated in prior legal IR research.
+	
+	\item \textbf{Verdict Prediction and Summarization:}
+	Verdict and sentence prediction using LLaMA 3 leverages structured inputs (facts, mapped sections, precedents), reducing hallucination risk. Summarization under a fixed word limit is a well-established task for large language models and can be executed with deterministic decoding strategies to ensure consistency.
 \end{itemize}
 
-\textbf{Organizational Readiness:}
-Driving schools require minimal infrastructure changes. System operates in 3m × 3m play area with standard electrical outlets. No specialized ventilation or motion platform foundations needed. Compatibility with existing lesson scheduling software (via CSV import/export) ensures smooth workflow integration.
+\textbf{Risk Assessment:}
+Technical risk is moderate. Primary concerns include model bias, reasoning reliability in ambiguous cases, and computational cost for large-scale deployment. These risks are mitigated through scope restriction (family matters), explainable intermediate outputs (truth scores, section mappings), and offline or batch inference workflows. Overall, the system is feasible within academic and prototyping constraints using currently available technologies.
 
-\textbf{Operational Verdict:} Feasible with moderate preparation. Success contingent on comprehensive instructor training and learner orientation sessions. Risk mitigation through pilot deployments (5--10 schools) before wider rollout.
 
+
+
+
+
+%\subsection{Economic Feasibility}
+%\textbf{Cost-Benefit Analysis:}
+%Economic viability is evaluated by comparing development and deployment costs against projected benefits for driving school adoption.
+%
+%\textbf{Development Costs (One-Time):}
+%\begin{itemize}
+%    \item \textbf{Hardware Prototyping:} Steering wheel assembly (₹8,000), pedals with load cells (₹6,000), gear shifter (₹4,000), ESP32 dev boards and sensors (₹3,000), miscellaneous components (₹4,000). \textit{Total: ₹25,000 (\$300 USD)}.
+%    
+%    \item \textbf{VR Headset:} Meta Quest 3 (128 GB): ₹50,000 (\$600 USD).
+%    
+%    \item \textbf{Software Licenses:} Unity Pro annual license (₹15,000/\$180 USD for educational discount), FMOD audio middleware (free for indie projects $<$\$500K revenue), 3D asset packs (vehicles, environments: ₹20,000/\$240 USD from Unity Asset Store).
+%    
+%    \item \textbf{Development Labor:} Estimated 6 months at 20 hours/week for a 3-member student team (unfunded academic project; opportunity cost estimated at ₹1,20,000 based on typical internship stipends).
+%    
+%    \item \textbf{Grand Total (Development):} ₹2,30,000 (\$2,760 USD).
+%\end{itemize}
+%
+%\textbf{Per-Unit Deployment Cost (Driving School):}
+%\begin{itemize}
+%    \item Hardware replication: ₹25,000 (controls) + ₹50,000 (Quest 3) = ₹75,000 (\$900 USD).
+%    \item Software licensing: One-time purchase of simulator app (proposed ₹10,000/\$120 USD per station if commercialized) or open-source distribution (₹0 for academic release~\cite{Silvera2022}).
+%    \item \textbf{Total per Station:} ₹85,000 (\$1,020 USD) for commercial model; ₹75,000 (\$900 USD) for open-source adoption.
+%\end{itemize}
+%
+%\textbf{Comparative Economics:}
+%Traditional commercial driving simulators cost ₹15,00,000--₹50,00,000 (\$18,000--\$60,000 USD) per unit. The proposed system achieves \textbf{85--95\% cost reduction} while maintaining educational effectiveness~\cite{He2022}. Break-even analysis for a driving school operating 5 training stations:
+%\begin{itemize}
+%    \item Traditional simulator investment: ₹75,00,000 (\$90,000 USD).
+%    \item Proposed VR simulator investment: ₹4,25,000 (\$5,100 USD).
+%    \item \textbf{Savings: ₹70,75,000 (\$84,900 USD)} — sufficient to fund 100+ learner enrollments.
+%\end{itemize}
+%
+%\textbf{Return on Investment (ROI):}
+%Assuming a driving school charges ₹500 (\$6 USD) per VR training hour and operates each station 6 hours/day × 25 days/month:
+%\begin{itemize}
+%    \item Monthly revenue per station: ₹75,000 (\$900 USD).
+%    \item ROI period: ₹85,000 ÷ ₹75,000 ≈ \textbf{1.2 months}.
+%\end{itemize}
+%\textbf{Economic Verdict:} Highly feasible. Low capital expenditure, rapid payback period, and significant cost advantage over alternatives strongly favor economic viability. Scalability to multiple driving schools amplifies impact.
+
+
+
+
+
+%\subsection{Operational Feasibility}
+%\textbf{User Acceptance and Usability:}
+%Operational success depends on instructor and learner acceptance, ease of use, and integration into existing curricula.
+%\begin{itemize}
+%    \item \textbf{Instructor Training:} System requires 2--3 hour onboarding session covering scenario configuration, assessment report interpretation, and hardware troubleshooting. User interface designed for non-technical users (tablet-based instructor panel with drag-and-drop scenario builder). Pilot testing at VJTI's automotive engineering lab confirms instructors can operate independently after minimal training.
+%    
+%    \item \textbf{Learner Comfort:} VR adoption hinges on minimizing motion sickness. Comfort protocols include: (1) 30-minute session limits with 10-minute breaks~\cite{Lindal2019}, (2) gradual VR exposure (start with stationary scenarios before moving to dynamic driving), (3) adjustable comfort settings (reduced FOV, teleportation mode for extreme discomfort cases). Pre-pilot surveys indicate 78\% of participants report "comfortable" or "very comfortable" experiences after 20-minute sessions.
+%    
+%    \item \textbf{Curriculum Integration:} System aligns with Indian RTO learning license syllabus: vehicle controls, traffic rules, road signs, parking maneuvers. Instructors can map VR scenarios to lesson plans (e.g., Week 2: Urban Lane Discipline → VR Scenario: "Mumbai Suburban Roads"). Session logs export to Excel/PDF for record-keeping compliance.
+%    
+%    \item \textbf{Maintenance and Support:} Hardware durability tested for 100+ hours continuous use without component failure. Bluetooth pairing issues resolved via documented reconnection protocol (manual mode fallback until firmware update). Software updates pushed via Unity Cloud Build; instructors notified via in-app prompts.
+%\end{itemize}
+%
+%\textbf{Organizational Readiness:}
+%Driving schools require minimal infrastructure changes. System operates in 3m × 3m play area with standard electrical outlets. No specialized ventilation or motion platform foundations needed. Compatibility with existing lesson scheduling software (via CSV import/export) ensures smooth workflow integration.
+%
+%\textbf{Operational Verdict:} Feasible with moderate preparation. Success contingent on comprehensive instructor training and learner orientation sessions. Risk mitigation through pilot deployments (5--10 schools) before wider rollout.
+
+
+
+\newpage
 \subsection{Schedule Feasibility}
-
 \textbf{Project Timeline and Milestones:}
-A six-month development schedule is proposed, aligned with academic project timelines and resource availability.
+A six-month development schedule is proposed, aligned with the academic calendar and the iterative nature of NLP system development. The timeline accounts for data preparation, model integration, evaluation, and documentation.
 
 \begin{table}[h]
-\caption{Project Development Schedule}
-\label{tab:schedule}
-\centering
-\small
-\begin{tabular}{|l|l|p{6cm}|}
-\hline
-\textbf{Phase} & \textbf{Duration} & \textbf{Deliverables} \\ \hline
-\textbf{Phase 1: Hardware Prototyping} & Weeks 1--4 & Functional steering wheel, pedals, gear shifter with BLE connectivity; ESP32 firmware validated. \\ \hline
-\textbf{Phase 2: Core Simulation} & Weeks 5--10 & Unity environment with basic vehicle physics, 2 vehicle models, 1 urban scenario; Quest 3 integration confirmed. \\ \hline
-\textbf{Phase 3: Feature Development} & Weeks 11--16 & Manual transmission logic, weather system, traffic AI, collision detection, HUD feedback, audio integration. \\ \hline
-\textbf{Phase 4: Assessment Module} & Weeks 17--20 & Automated scoring algorithm, PDF report generation, instructor dashboard prototype. \\ \hline
-\textbf{Phase 5: Testing \& Refinement} & Weeks 21--24 & User testing (15--20 participants), bug fixes, performance optimization, documentation finalization. \\ \hline
-\end{tabular}
+	\caption{Project Development Schedule}
+	\label{tab:schedule}
+	\centering
+	\small
+	\begin{tabular}{|l|l|p{6cm}|}
+		\hline
+		\textbf{Phase} & \textbf{Duration} & \textbf{Deliverables} \\ \hline
+		\textbf{Phase 1: Data Collection \& Preprocessing} & Weeks 1--4 & Curated dataset of trial and high court judgments; PDF-to-text pipeline using Fitz; cleaned and segmented legal text. \\ \hline
+		\textbf{Phase 2: Legal Entity Recognition \& IPC Mapping} & Weeks 5--8 & Fine-tuned Legal-BERT models for NER and IPC/section identification; validated extraction accuracy on sample cases. \\ \hline
+		\textbf{Phase 3: Evidence Scrutinization Module} & Weeks 9--12 & Contradiction detection and truth-scoring logic implemented using LLaMA 3; structured evidence representation. \\ \hline
+		\textbf{Phase 4: Precedent Retrieval System} & Weeks 13--16 & Embedding-based Similar Case Matching (SCM); vector database of precedents; ranked precedent retrieval. \\ \hline
+		\textbf{Phase 5: Verdict Prediction \& Summarization} & Weeks 17--20 & Verdict and sentence prediction pipeline using LLaMA 3; simplified summary generation under 150 words. \\ \hline
+		\textbf{Phase 6: Evaluation \& Refinement} & Weeks 21--24 & Quantitative evaluation (accuracy, precision, recall); qualitative case studies; system optimization and documentation. \\ \hline
+	\end{tabular}
 \end{table}
 
 \textbf{Critical Path Analysis:}
-The longest dependency chain runs through vehicle physics tuning (Phase 2) → manual transmission integration (Phase 3) → assessment validation (Phase 4). Delays in physics modeling directly impact downstream features. Buffer time (Weeks 23--24) allocated for unforeseen technical challenges.
+The critical dependency chain progresses through reliable data preprocessing (Phase 1) → accurate IPC mapping (Phase 2) → evidence scrutinization (Phase 3). Errors in early-stage legal text processing propagate downstream and directly affect verdict prediction quality. Buffer time is allocated in Phase 6 to address cumulative model errors and integration issues.
 
 \textbf{Resource Availability:}
-Team comprises 3 engineering students (1 hardware specialist, 1 Unity developer, 1 UX/testing coordinator) with faculty advisor oversight. Development scheduled during academic semester; no exam period conflicts. Hardware procurement lead time: 2 weeks (local electronics markets in Mumbai). No external dependencies on third-party contractors.
+The project is executed by a single postgraduate student with guidance from a faculty advisor. Development relies on open-source libraries (Legal-BERT, PyMuPDF, vector databases) and institutional computing resources. Model inference is scheduled offline or in batch mode, ensuring feasibility without continuous high-end GPU availability.
 
 \textbf{Schedule Risks:}
 \begin{itemize}
-    \item \textbf{Hardware Delays:} Component sourcing issues (e.g., load cell sensors out of stock) could push Phase 1 by 1--2 weeks. Mitigation: Pre-order critical components; identify backup suppliers.
-    \item \textbf{Learning Curve:} Team's first VR project; Unity XR development paradigms may require additional learning time. Mitigation: Frontload online tutorials (Weeks 1--2); allocate Phase 2 buffer for experimentation.
-    \item \textbf{Testing Recruitment:} Difficulty recruiting 20 diverse participants for Phase 5. Mitigation: Leverage VJTI student body; offer participation certificates.
+	\item \textbf{Data Quality Issues:} Inconsistent formatting or OCR errors in court documents may delay Phase 1. Mitigation: Restrict scope to digitally available judgments; apply automated cleaning heuristics.
+	\item \textbf{Model Integration Complexity:} Coordinating multiple NLP models (Legal-BERT, LLaMA 3) may increase integration time. Mitigation: Modular pipeline design with independently testable components.
+	\item \textbf{Evaluation Challenges:} Ground-truth verdict labels may be limited for certain case types. Mitigation: Combine quantitative metrics with expert-reviewed qualitative analysis.
 \end{itemize}
 
-\textbf{Schedule Verdict:} Feasible with realistic timelines. Six-month duration balances ambition with academic constraints. Success depends on disciplined milestone tracking and proactive risk management.
+\textbf{Schedule Verdict:}
+The proposed six-month schedule is feasible and well-aligned with academic constraints. Clear phase boundaries, modular development, and buffer time for evaluation ensure timely completion of the project.
+
+
+
+
+
 
 \subsection{Legal and Regulatory Feasibility}
 
 \textbf{Intellectual Property and Licensing:}
 \begin{itemize}
-    \item \textbf{Software Licensing:} Unity Pro educational license permits non-commercial academic projects. Open-source release under MIT License planned to encourage community adoption~\cite{Silvera2022}.
-    \item \textbf{Asset Usage:} Vehicle 3D models sourced from Unity Asset Store with appropriate licenses (Standard License allows unlimited project use; Extended License not required for educational distribution). Custom textures created in-house avoid copyright concerns.
-    \item \textbf{Patent Landscape:} Prior art search reveals no blocking patents for Bluetooth driving controls in VR training. Generic input mapping techniques fall under established prior art. Novel contributions (e.g., clutch engagement modeling algorithm) potentially patentable but not pursued during academic phase.
+	\item \textbf{Software Licensing:} 
+	The system is developed using open-source libraries and pretrained models such as Legal-BERT, PyMuPDF (Fitz), and vector database frameworks, all of which permit academic and research use under permissive licenses (e.g., Apache 2.0, MIT). The project is intended strictly for non-commercial academic purposes, ensuring compliance with licensing terms.
+	
+	\item \textbf{Model Usage Rights:}
+	Pretrained language models (e.g., Legal-BERT, LLaMA 3) are used for inference and fine-tuning in accordance with their respective research-use licenses. No proprietary datasets or restricted commercial legal databases are incorporated, avoiding licensing conflicts.
+	
+	\item \textbf{Original Contributions:}
+	The architectural design, truth-scoring heuristics, and pipeline integration constitute original academic work. While certain components (e.g., contradiction-aware verdict prediction) may have future commercial potential, no patent claims are pursued during the academic phase.
 \end{itemize}
 
-\textbf{Safety and Liability:}
+\textbf{Legal Compliance and Ethical Use:}
 \begin{itemize}
-    \item \textbf{VR Safety Guidelines:} System complies with Oculus Health \& Safety warnings: age restriction (13+), seizure/motion sickness disclaimers, play area boundary setup. Informed consent forms distributed to pilot testers.
-    \item \textbf{Training Validity:} Current Indian regulations do not recognize VR training hours toward RTO learning license requirements. System positioned as supplemental training tool, not replacement for mandatory on-road practice. Future advocacy for regulatory acceptance requires longitudinal validation studies (beyond project scope)~\cite{He2022}.
+	\item \textbf{Judicial Data Usage:}
+	Indian court judgments are public records and may be used for research and educational purposes. The system operates on publicly accessible judgments without violating confidentiality or access restrictions. Sensitive personal identifiers, if present, are not explicitly extracted or highlighted.
+	
+	\item \textbf{Decision Support Disclaimer:}
+	The system is positioned as a legal decision-support and research aid, not as a substitute for judicial authority or professional legal advice. Outputs are presented as predictions or analytical assistance, accompanied by disclaimers to prevent misuse.
 \end{itemize}
 
-\textbf{Data Privacy:}
-Session logs (driving metrics, error patterns) constitute personal performance data. System complies with data minimization principles: no video recording of users, no biometric data collection, anonymized identifiers for analytics. GDPR-equivalent consent mechanisms (opt-in data sharing for research) implemented.
+\textbf{Data Privacy and Protection:}
+Case documents may contain personal or sensitive information. To address privacy concerns, the system follows data minimization and purpose limitation principles. No user-identifiable metadata is stored beyond case identifiers, and datasets are anonymized where feasible. The design aligns with principles outlined in India’s Digital Personal Data Protection Act (DPDP Act, 2023), particularly regarding lawful processing and academic exemptions.
 
-\textbf{Legal Verdict:} Feasible with standard precautions. No legal blockers identified for academic prototype development and pilot testing. Commercial deployment requires legal entity formation, liability insurance, and formal safety certifications (ISO 26262 compliance for automotive training systems).
+\textbf{Bias and Fairness Considerations:}
+Machine learning models trained on historical legal data may inherit systemic biases present in past judgments. To mitigate this risk, the system incorporates explainable intermediate outputs (truth scores, IPC mappings, retrieved precedents) rather than opaque end-to-end predictions. This supports transparency and allows human users to critically evaluate model outputs.
+
+\textbf{Legal Verdict:}
+The project is legally and regulatorily feasible for academic research and prototyping. No statutory or regulatory barriers prevent development or evaluation. Any future commercial deployment would require additional compliance measures, including professional liability considerations, dataset licensing audits, and formal ethical review.
+
+
+
+
+
+
 
 \subsection{Overall Feasibility Conclusion}
-
 \begin{table}[h]
-\caption{Feasibility Assessment Summary}
-\label{tab:feasibility}
-\centering
-\begin{tabular}{|l|c|p{6.5cm}|}
-\hline
-\textbf{Feasibility Dimension} & \textbf{Rating} & \textbf{Key Justification} \\ \hline
-Technical & High & Proven hardware/software components; minor optimization challenges. \\ \hline
-Economic & Very High & 85--95\% cost reduction vs. commercial alternatives; 1.2-month ROI. \\ \hline
-Operational & Moderate-High & User acceptance positive; requires instructor training and pilot validation. \\ \hline
-Schedule & High & Realistic 6-month timeline with defined milestones and buffers. \\ \hline
-Legal & High & No IP conflicts; standard safety compliance; regulatory advocacy long-term. \\ \hline
-\end{tabular}
+	\caption{Feasibility Assessment Summary}
+	\label{tab:feasibility}
+	\centering
+	\begin{tabular}{|l|c|p{6.5cm}|}
+		\hline
+		\textbf{Feasibility Dimension} & \textbf{Rating} & \textbf{Key Justification} \\ \hline
+		Technical & High & Mature NLP models (Legal-BERT, LLaMA 3); modular pipeline; no real-time constraints apart from Dataset acquisiton. \\ \hline
+		Economic & Very High & Open-source tools; no proprietary data costs; feasible on academic compute resources. \\ \hline
+		Operational & Moderate-High & Decision-support positioning; interpretability via intermediate outputs; expert oversight required. \\ \hline
+		Schedule & High & Realistic 6-month timeline with phased milestones and buffer for evaluation. \\ \hline
+		Legal \& Ethical & High & Uses public judicial data; DPDP-compliant design; clear non-advisory disclaimers. \\ \hline
+	\end{tabular}
 \end{table}
 
-The feasibility study confirms that the VR Driving Simulator project is \textbf{highly viable} across all critical dimensions. Technical maturity of consumer VR hardware, compelling economic advantages, achievable development timelines, and manageable regulatory requirements collectively support a strong probability of successful implementation. The primary recommendation is to proceed with phased development, emphasizing early user feedback loops and iterative refinement to validate operational assumptions before scaling to multi-school deployments.
+The feasibility assessment indicates that the proposed Legal Precedent Assistant is \textbf{highly viable} across all critical dimensions. The availability of domain-adapted language models, publicly accessible judicial data, and scalable retrieval techniques supports robust technical implementation. Economic and scheduling constraints are well within academic limits, while legal and ethical risks are mitigated through transparent system design and restricted scope. It is recommended to proceed with phased development, emphasizing early validation of preprocessing accuracy and expert-reviewed evaluation to ensure reliability before extending the system to broader legal domains.
