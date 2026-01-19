@@ -285,7 +285,7 @@ Evaluates BERT-based models vs. zero-shot LLMs (Llama 3.1, Gemma 2) using a cura
 
 \end{longtable}}
 
-\noindent The studies summarized in Table~\ref{tab:litreview} collectively indicate that interaction fidelity, physiological engagement monitoring, and gamification significantly influence driver training outcomes and user vigilance. These insights directly inform the system design of the proposed VR-based driving simulator presented in Chapter~\ref{ch:system_analysis}.
+\noindent The studies summarized in Table~\ref{tab:litreview} collectively indicate the flaws in Legal NLP primarily local language support, jurisdiction transferrability, BERT token limits, etc. The Literature also offers insights into approaches such as DAPT, Contrastive Learning, RAG, UDA, Sliding Sequence window and other techniques which can help us overcome the stated gaps in Chapter.~\ref{ch:system_analysis}.
 
 
 
@@ -295,7 +295,7 @@ Evaluates BERT-based models vs. zero-shot LLMs (Llama 3.1, Gemma 2) using a cura
 
 \section{Research Gap Analysis}\label{sec:gap_analysis}
 
-Based on the comprehensive literature review, several critical research gaps have been identified in the current state of VR-based driving simulation and training systems:
+Based on the comprehensive literature review, several critical research gaps have been identified in the current models for Legal NLP systems:
 
 \subsection{Hardware and Physical Interaction Fidelity for LPA}
 \textbf{Gap 1: High VRAM and Computational Overhead.} Several high-performing models, such as those using 1024-token \cite{b5} inputs or dual attention architectures, consume excessive VRAM and require significant computational power.
@@ -357,4 +357,4 @@ The identified gaps highlight five overarching themes requiring urgent research 
     \item \textbf{Regulatory, ethical, and accessibility barriers,} including high development costs, confidentiality-driven reproducibility issues, and insufficient multilingual support.
 \end{enumerate}
 
-\noindent The proposed Legal Precedent Assistant for Indian Family Courts, built using LegalBERT for structured semantic representation and LLaMA-3.1 for long-context reasoning and explanation, directly addresses Gaps 2, 3, and 4, and partially mitigates Gaps 1 and 5. By narrowing the domain to family-law jurisprudence, leveraging weak supervision and domain-adaptive pretraining on Indian judgments, and employing explainable, modular inference pipelines, the system enables cost-effective, jurisdiction-aware, and interpretable legal decision support. Subsequent chapters detail the architecture, training strategy, and evaluation framework designed to bridge these critical research gaps within realistic academic and infrastructural constraints.
+\noindent The proposed Legal Precedent Assistant for Indian Family Courts, built using LegalBERT for structured semantic representation and LLaMA-3.1 for long-context reasoning and explanation, directly addresses Gaps 2, 3, and 4, and partially mitigates Gaps 1 and 5. By narrowing the domain to family-law jurisprudence, leveraging weak supervision and domain-adaptive pretraining on Indian judgments, and employing modular inference pipelines, the system enables cost-effective, jurisdiction-aware, and interpretable legal decision support. Subsequent chapters detail the architecture, training strategy, and evaluation framework designed to bridge these critical research gaps within realistic academic and infrastructural constraints.

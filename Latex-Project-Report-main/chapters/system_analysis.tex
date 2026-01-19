@@ -2,8 +2,8 @@
 \label{ch:system_analysis}
 
 \section{Overview}
-The \textbf{VR Driving Simulator} project aims to provide a high-fidelity training and evaluation environment for driving schools. 
-The simulator models real-world driving dynamics using virtual reality and custom-built physical input devices (steering wheel, pedals, and gear shifter). 
+The \textbf{Legal Precedent Assistant for Indian Family Courts} project aims to provide a highly accurate modular and transferrable NLP model for ILC. 
+The proposed model will be built for Family courts and use Legal-BERT and Llama 3 as baselinses with DAPT for both models on ILC. 
 This chapter presents a comprehensive analysis of requirements, constraints, design alternatives, and system architecture that directly address the research gaps and problem statement identified in Chapters~\ref{ch:intro} and~\ref{ch:lit_review}.
 
 \section{Requirements Analysis}
@@ -264,7 +264,7 @@ The design decisions documented in this chapter directly address the research ga
     \item \textbf{Gap 6 (Semantic Accuracy): }  By utilizing LegalBERT and Dual-Attention mechanisms, the system captures complex legal jargon and intra-sentence relationships that traditional "Bag of Words" or basic frequency models fail to retrieve.
 \end{itemize}
 
-The comparative analysis (Table~\ref{tab:comparative_analysis}) demonstrates that this design occupies a unique position: research-grade flexibility at commercial-training affordability, specifically tailored for the Indian driving school market.
+The comparative analysis (Table~\ref{tab:comparative_analysis}) demonstrates that this design occupies a unique position: language flexibility, domain transferrability, efficient training at commercial-training affordability, specifically tailored for the Indian Legal landscape.
 
 \newpage
 
@@ -274,7 +274,7 @@ The workflow diagram (Figure~\ref{fig:workflow}) shows the sequential process of
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{figs/workflow_diagram.pdf}
-    \caption{Operational workflow showing the complete training session lifecycle: pre-session setup, real-time simulation loop, and post-session assessment generation.}
+    \caption{Operational workflow showing the complete training session lifecycle: input document setup, context retrieval and analysis, and post-analysis summary generation.}
     \label{fig:workflow}
 \end{figure}
 
