@@ -3,7 +3,7 @@
 
 \section{Overview}
 The \textbf{Legal Precedent Assistant for Indian Family Courts} project aims to provide a highly accurate modular and transferrable NLP model for ILC. 
-The proposed model will be built for Family courts and use Legal-BERT and Llama 3 as baselinses with DAPT for both models on ILC. 
+The proposed model will be built for Family courts and use BERT, Llama, Deepseek and/or Gemini as baselinses with DAPT for the smaller models on ILC. 
 This chapter presents a comprehensive analysis of requirements, constraints, design alternatives, and system architecture that directly address the research gaps and problem statement identified in Chapters~\ref{ch:intro} and~\ref{ch:lit_review}.
 
 \section{Requirements Analysis}
@@ -24,28 +24,28 @@ Based on the identified research gaps and Legal professional's needs, the system
 
 \textbf{FR3: Evidence Scrutinization}
 \begin{itemize}
-    \item Llama 3.1 should be used to perform evidence scrutinization and a consistency audit for both sides, to try and determine contradictions in both side’s statements.
+    \item Gemini should be used to perform evidence scrutinization and a consistency audit for both sides, to try and determine contradictions in both side’s statements.
 \end{itemize}
 
 \textbf{FR4: IPC Mapping}
 \begin{itemize}
-    \item If the document contains any articles/code/IPC violations they should be tracked either based on the codes or based on statements.
+    \item If the document contains any articles/code/IPC violations they should be tracked either based on the codes or based on statements or by using a vector db to match and extract relevant IPCs.
 \end{itemize}
 
 \textbf{FR5: Precedent Retrieval}
 \begin{itemize}
-    \item Match the current court case documents with past similar court cases and find precedents from past judgements to aid in verdict/judgement of present case.
+    \item Use a vector DB to match the current court case documents with past similar court cases and find precedents from past judgements to aid in verdict/judgement of present case.
 \end{itemize}
 
 \textbf{FR6: Verdict Prediction}
 \begin{itemize}
-	\item Predict the verdict using the previous 3 requirements.
+	\item Predict the verdict using the previous 3 requirements while also taking into account retrieved precedents.
 
 \end{itemize}
 
 \textbf{FR7: Summarization}
 \begin{itemize}
-	\item •	Summarize the judgement and the case contents in 150 words or less.
+	\item Summarize the judgement and the case contents in 150 words or less.
 
 \end{itemize}
 
@@ -53,7 +53,7 @@ Based on the identified research gaps and Legal professional's needs, the system
 
 \textbf{NFR1: Cost Effectiveness}
 \begin{itemize}
-    \item Make use of freely available datasets and LLM models.
+    \item Make use of freely available datasets, vector DBs, LLM models and LLM APIs.
 \end{itemize}
 
 \textbf{NFR2: Usability and Accessibility}
@@ -63,7 +63,7 @@ Based on the identified research gaps and Legal professional's needs, the system
 
 \textbf{NFR3: Reliability and Maintainability}
 \begin{itemize}
-    \item The system should be able to handle any cases in the Family courts domain reliably, and should be maintained and upgraded as per changes in Family law. 
+    \item The system should be able to handle any cases in the Family courts domain reliably, and should be maintained and upgraded as per changes in Family law such as transition from IPC to BNS. 
 \end{itemize}
 
 \textbf{NFR4: Explainability and Interpretability}

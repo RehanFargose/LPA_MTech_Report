@@ -8,9 +8,11 @@ The dataset has been procured from AWS Registry for Indian Supreme court and Hig
 
 Most of the existing NLP models for Legal Document processing such as LegalBERT, RoBERTA, DistillBERT, etc, are trained either on European, American or Chinese Legal corpus, thus making them difficult for use in the Indian Legal landscape. To combat this, we have proposed the development and design of a \textbf{Legal Precedent Assistant for Indian Judiciary}, focusing on Determining truth from presented evidence, IPC mapping, Summarization and Verdict Prediction.
 
-DAPT (Domain-Adaptive Pre-training) will be used in conjunction with SCM(Similarity Case Matching) and Contrastive learning to train a LegalBERT/Llama model on the Indian Legal Corpus dataset. This model will then be finetuned further for our 5 stated goals. Since, the Indian Legal process is descended from the British Legal system, LegalBERT/Llama could be adapted/transferred from ECHR to IPC; provided we have a substantially large and refined dataset.
+DAPT (Domain-Adaptive Pre-training) will be used in conjunction with SCM(Similarity Case Matching) and Vector DB to train a LegalBERT/Llama model or use a existing Gemini model on the Indian Legal Corpus dataset. This model will then be finetuned further for our 5 stated goals. Since, the Indian Legal process is descended from the British Legal system, LegalBERT/Llama could be adapted/transferred from ECHR to IPC; provided we have a substantially large and refined dataset.
 
-The system will take case documents (.pdf, .docx, .txt, etc) as input; convert and clean them into a text files and feed them to the 5 stage system pipeline. The 1st stage will be for Evidence extraction and using the alibis and statements provided by both parties to try and find any contradictions in the case. The 2nd  stage will be for mapping the IPC codes found in the input document. In parallel to IPC mapping, we will also have the 3rd stage which is used to find legal precedents/case law for similar types of cases in the past. The 4th stage will be verdict prediction; to use the mapped IPC codes and additional context extracted from the 1st and 3rd stages, to predict an outcome \cite{b5}; Chance of Appellant/Defendant winning and what the judgement/punishment will be in a short sentence. The 5th and final stage will be to summarize the document in 150 words or less. The 2 Initial stages are aimed towards Legal Professionals, whereas the last stage is primarily for the General public’s understanding. NER for IPC mapping should not be used as Standalone, as Judges utilise more context to Adjudicate for a given circumstance \cite{b3}.
+A Vector Database such as Chroma DB with Streamlit for UI and the BAAI/bge-small-en-v1.5 model for creating vector embeddings can allow us to create a efficient RAG pipeline to act as external specialised memory for larger LLMs as smaller LLMs tend to have low context length which can fail to capture long Legal documents.
+
+The system will take case documents (.pdf, .docx, .txt, etc) as input; convert, clean and translate into english text files and feed them to the 5 stage system pipeline. The 1st stage will be for Evidence extraction and using the alibis and statements provided by both parties to try and find any contradictions in the case. The 2nd  stage will be for mapping the IPC codes found in the input document. In parallel to IPC mapping, we will also have the 3rd stage which is used to find legal precedents/case law for similar types of cases in the past. The 4th stage will be verdict prediction; to use the mapped IPC codes and additional context extracted from the 1st and 3rd stages, to predict an outcome \cite{b5}; Chance of Appellant/Defendant winning and what the judgement/punishment will be in a short sentence. The 5th and final stage will be to summarize the document in 150 words or less. The 2 Initial stages are aimed towards Legal Professionals, whereas the last stage is primarily for the General public’s understanding. NER for IPC mapping should not be used as Standalone, as Judges utilise more context to Adjudicate for a given circumstance \cite{b3}.
 
 The system can also take in Case documents in Marathi as well as Hindi, however, due to lack of specialized and established models for Indic languages their Prediction and Summarization capabilities would be greatly limited and more raw data and metadata would be required to improve this part of the system.
 
@@ -33,7 +35,7 @@ Despite growing interest in Legal NLP, current systems exhibit critical limitati
     \item \textbf{Limited Language Support:} Popular Legal NLP models are based on either English or Mandarin. Indic Language support is exceedingly rare due to the lack of dataset based on Indian legal corpus.
 \end{enumerate}
 
-There exists a clear need for a thorough, multi-purpose, scalable, and ipc-accurate Legal NLP model that bridges the computational overhead gap, scrutinizes presented evidence, finds relevant precedents, supports multiple languages, and provides a framework aligned with judiciary standards—all while maintaining the privacy of both parties and provide a fair verdict.
+There exists a clear need for a thorough, multi-purpose, scalable, and ipc/ bns-accurate Legal NLP model that bridges the computational overhead gap, scrutinizes presented evidence, finds relevant precedents, supports multiple languages, and provides a framework aligned with judiciary standards—all while maintaining the privacy of both parties and provide a fair verdict.
 
 
 \pagebreak
@@ -65,24 +67,24 @@ The model development encompasses:
     \item Dataset building via data collected from District and High courts and filtering based on Family court cases.
     \item Perform case evidence scrutinization on both sides using Llama for consistency audit to find any contradictions.
     \item Precedent search via Contrastive learning and Similar Case Matching (SCM).
-    \item IPC mapping using NER via Bi-LSTM encoder/Llama.
-    \item Verdict Prediction using Llama/LegalBERT.
-    \item Summarization using Llama.
-    \item Indic language support limited only to Marathi and Hindi.
-    \item Acts as replacement/tool for of a hired legal assistant.
+    \item IPC/BNS mapping using NER via Deepseek/Llama/Gemini.
+    \item Verdict Prediction using Llama/LegalBERT/Gemini.
+    \item Summarization using Llama/Gemini.
+    \item Indic language support available for most major state languages.
+    \item Acts as replacement/tool for of a hired legal assistant/counsellor.
 \end{itemize}
 
 \subsection{Out of Scope}
 The following are explicitly excluded from the current project phase:
 \begin{itemize}
-    \item No support for other Local languages such as Gujarati, Kannada, Tamil, etc.
+    \item No support for niche Local languages.
     \item Evidence scrutinization limited only to evidence and case docs provided as input.
     \item Consistency audit for evidence prone to LLM hallucinations.
-    \item Only focused for Family court, no support for Criminal, Industrial, Copyright proceedings, etc.
+    \item Only focused for Family court, only generic support for Criminal, Industrial, Copyright proceedings, etc.
     \item Quality of dataset dependent upon raw data provided by Family/District/High courts.
     \item Not meant to be used as a replacement for an actual Attorney/Lawyers/Judge.
     \item Verdict and summary might need to be reviewed, as the sentence passed might not have all the context despite using Precedents.
-    \item The Verdict does not take into account the current financial, personal and other circumstances of individuals involved when passing the sentence.
+    \item The Verdict is limited to what was shared with the model in the user's input documents.
 \end{itemize}
 
 \section{Research Organization}
