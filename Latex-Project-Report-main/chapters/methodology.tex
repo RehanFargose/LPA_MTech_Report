@@ -175,7 +175,7 @@ This chapter outlines the proposed development methodology, implementation phase
 
 \subsection{Model-Level Validation Tests}
 \begin{enumerate}
-	\item \textbf{NER Accuracy Test:} Evaluate Legal-BERT NER output against manually annotated ground truth using precision, recall, and F1-score.
+	\item \textbf{NER Accuracy Test:} Evaluate Dslim's NER output against manually annotated ground truth using precision, recall, and F1-score.
 	\item \textbf{IPC Mapping Verification:} Compare predicted IPC/section mappings with sections cited in final judgments.
 	\item \textbf{Contradiction Detection Test:} Manually inspect detected contradictions in selected cases to assess logical correctness.
 	\item \textbf{Precedent Retrieval Test:} Evaluate relevance of top-$k$ retrieved precedents through expert judgment.
@@ -207,7 +207,7 @@ This chapter outlines the proposed development methodology, implementation phase
 	\textbf{Mitigation:} Restrict dataset to digitally generated judgments; apply OCR correction and rule-based cleaning; manual validation on samples
 	\item \textbf{Risk:} NER and IPC mapping inaccuracies propagate downstream
 	\textbf{Mitigation:} Use confidence thresholds; cross-validate with rule-based section detection; allow manual correction for evaluation
-	\item \textbf{Risk:} High computational cost of LLaMA 3 inference
+	\item \textbf{Risk:} High computational cost of Deepseek R1 8B/Gemini inference
 	\textbf{Mitigation:} Process segmented text blocks; batch inference; limit token length; offline execution
 \end{itemize}
 

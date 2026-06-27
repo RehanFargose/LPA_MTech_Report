@@ -282,49 +282,58 @@ The workflow diagram (Figure~\ref{fig:workflow}) shows the sequential process of
 \begin{enumerate}
 	\item \textbf{Case Ingestion \& Setup (1--2 minutes):}
 	\begin{itemize}
-		\item User uploads case documents from both parties (petitions, replies, affidavits, evidence PDFs).
-		\item System validates document types, court metadata, and case category (e.g., family matter).
+		\item User uploads case documents such as petitions and affidavit of evidences from both parties.
+		\item System extracts document types, court metadata, and case category (e.g., criminal, civil, etc).
 		\item Documents are indexed and assigned a unique case ID for tracking across pipeline stages.
 	\end{itemize}
 	
 	\item \textbf{Text Extraction \& Pre-processing:}
 	\begin{itemize}
-		\item PDFs are parsed using Fitz to extract raw text from judgments and evidence.
+		\item PDFs are parsed using PyMuPDF/Fitz to extract raw text from judgments and evidence.
 		\item Text is cleaned (noise removal, normalization) and segmented into logical units (facts, arguments, evidence).
-		\item Legal-BERT based NER identifies legal entities such as parties, dates, IPC sections, and acts.
+		\item A LLM such as Deepseek R1(improved via DAPT) or Gemini is used to do initial synthesis of the documents.
 	\end{itemize}
 	
-	\item \textbf{Evidence Scrutinization \& Truth Scoring:}
+	
+	\item \textbf{Precedent Retrieval via Vector DB:}
 	\begin{itemize}
-		\item Evidence statements from both sides are analyzed for contradictions and inconsistencies.
-		\item LLaMA 3 performs a consistency audit to evaluate logical coherence across claims.
-		\item Each evidence block is assigned a normalized truth score based on contradiction severity.
+		\item The extracted pdf data is then vectorized using the BAAI/BG-3 model and the query is passed to Chroma DB.
+		\item Chroma DB uses the vectorized query to find matching vectors/similar cases within it's database.
+		\item The Precedents(past judgements) are then retrieved and converted from vector representations into a textual format(strings)
+		\item These retrieved precedents are then fed to the LLM in next stages of the Pipeline/system.
 	\end{itemize}
 	
-	\item \textbf{IPC / Section Mapping:}
+	
+		\item \textbf{Initial Synthesis:}
 	\begin{itemize}
-		\item Cleaned and truth-weighted text is passed to Legal-BERT for legal provision classification.
-		\item Relevant IPC sections and statutory provisions are identified and stored.
-		\item Mapped sections are linked with supporting evidence for downstream reasoning.
+		\item The LLM extracts basic data from the input pdfs.
+		\item The initial synthesis includes name of both parties, important dates and primary allegations from both sides.
+		\item Mapped IPC/BNS sections/acts/articles are also identified, but can change downstream based on more accurate data analysis and precedent alignment.
 	\end{itemize}
 	
-	\item \textbf{Precedent Retrieval:}
+	
+	
+	\item \textbf{Evidence Scrutinization:}
 	\begin{itemize}
-		\item Case embeddings are generated using Legal-BERT.
-		\item Similar Case Matching (SCM) retrieves precedent judgments with analogous fact patterns.
-		\item Retrieved precedents are ranked by contextual similarity and relevance of applied sections.
+		\item Evidence affidavits from both sides are analyzed for contradictions and inconsistencies.
+		\item Gemini/Deepseek R1 performs a consistency audit to evaluate logical coherence across claims.
+		\item The LLM is also instructed to match the timeline and use alibis provided to check timeline consistency.
 	\end{itemize}
+	
+	
 	
 	\item \textbf{Verdict \& Sentence Prediction:}
 	\begin{itemize}
-		\item LLaMA 3 consumes case facts, truth scores, mapped sections, and precedents.
+		\item Gemini consumes case facts, evidence scrutiny, mapped sections/acts/articles, and precedents.
 		\item System predicts likely verdict outcome (e.g., Allowed / Dismissed) and probable sentence or relief.
 	\end{itemize}
 	
+	
+	
 	\item \textbf{Summarization \& Output Generation:}
 	\begin{itemize}
-		\item Predicted verdict and reasoning are simplified using LLaMA 3.
-		\item Legal jargon is minimized to produce a concise summary under 150 words.
+		\item Predicted verdict and reasoning are simplified
+		\item Legal jargon is minimized to produce a concise summary under ~150 words.
 		\item Final output includes verdict prediction, key reasoning points, and applicable legal sections.
 	\end{itemize}
 \end{enumerate}
