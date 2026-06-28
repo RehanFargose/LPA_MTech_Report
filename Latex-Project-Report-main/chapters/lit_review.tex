@@ -285,7 +285,7 @@ Evaluates BERT-based models vs. zero-shot LLMs (Llama 3.1, Gemma 2) using a cura
 
 \end{longtable}}
 
-\noindent The studies summarized in Table~\ref{tab:litreview} collectively indicate the flaws in Legal NLP primarily local language support, jurisdiction transferrability, BERT token limits, etc. The Literature also offers insights into approaches such as DAPT, Contrastive Learning, RAG, UDA, Sliding Sequence window and other techniques which can help us overcome the stated gaps in Chapter.~\ref{ch:system_analysis}.
+\noindent The studies summarized in Table~\ref{tab:litreview} collectively indicate the flaws in Legal NLP primarily local language support, jurisdiction transferrability, LLM token limits, lack of precedents, etc. The Literature also offers insights into approaches such as DAPT, Contrastive Learning, RAG, UDA, Sliding Sequence window and other techniques which can help us overcome the stated gaps in Chapter.~\ref{ch:system_analysis}.
 
 
 
@@ -309,7 +309,7 @@ Based on the comprehensive literature review, several critical research gaps hav
 
 
 \subsection{Methodological and Sample Limitations}
-\textbf{Gap 5: Jurisdictional and Geographic Bias:.} A significant majority of reviewed studies~\cite{Muguro2023,Qadir2019,Xu2022,Schultheis2005,Chung2022} A critical gap exists for models trained on Indian Legal corpora, as the majority of current research focuses on US, EU, or Chinese datasets \cite{b6}  \cite{b8}  \cite{b11}  \cite{b16}.
+\textbf{Gap 5: Jurisdictional and Geographic Bias:.} A significant majority of reviewed studies~\cite{b6, b8, b11, b16}; a critical gap exists for models trained on Indian Legal corpora, as the majority of current research focuses on US, EU, or Chinese datasets.
 
 \textbf{Gap 6: Data Scarcity and Overfitting.} Many systems suffer from overfitting \cite{b4}  \cite{b7} \cite{b20} due to small, restrictive datasets, such as those sourced from specific prosecutor offices or Supreme Courts with limited case counts.	
 
@@ -320,7 +320,7 @@ Based on the comprehensive literature review, several critical research gaps hav
 \subsection{Pedagogical and Training Effectiveness}
 \textbf{Gap 9: Lack of Domain-Specific Customization.} Many models lack fine-tuning for specific legal sub-domains \cite{b17} \cite{b21} (e.g., transitioning from Criminal to Administrative law), leading to a lack of contextual depth.
 
-\textbf{Gap 10: Diminishing Returns in Training.} There is a significant efficiency gap where marginal gains in F1 score (e.g., 1.5\%) require exponentially longer training times \cite{b9} \cite{b21} (e.g., 7x).
+\textbf{Gap 10: Diminishing Returns in Training.} There is a significant efficiency gap where marginal gains in F1 score (e.g., 1.5\%) require exponentially longer training times \cite{b9} \cite{b21} (e.g., 7x training time for 1.5\% f1 score gain).
 
 \textbf{Gap 11: Annotation Dependency.} The effectiveness of these models is highly dependent on expert-annotated judgments \cite{b19} \cite{b24} \cite{b25}, which are expensive and difficult to scale.
 
@@ -357,4 +357,4 @@ The identified gaps highlight five overarching themes requiring urgent research 
     \item \textbf{Regulatory, ethical, and accessibility barriers,} including high development costs, confidentiality-driven reproducibility issues, and insufficient multilingual support.
 \end{enumerate}
 
-\noindent The proposed Legal Precedent Assistant for Indian Family Courts, built using LegalBERT for structured semantic representation and LLaMA-3.1 for long-context reasoning and explanation, directly addresses Gaps 2, 3, and 4, and partially mitigates Gaps 1 and 5. By narrowing the domain to family-law jurisprudence, leveraging weak supervision and domain-adaptive pretraining on Indian judgments, and employing modular inference pipelines, the system enables cost-effective, jurisdiction-aware, and interpretable legal decision support. Subsequent chapters detail the architecture, training strategy, and evaluation framework designed to bridge these critical research gaps within realistic academic and infrastructural constraints.
+\noindent The proposed Legal Precedent Assistant for Indian Family Courts; uses NLLB for translation, PyMuPDF/Fitz for text extraction, BAAI-BG3 for Vectorization(both Dataset and Query/Inputs), Chroma DB for storing a vector dataset, Gemini for long-context reasoning and explanation, directly addresses Gaps 2, 3, and 4, and partially mitigates Gaps 1 and 5. By narrowing the domain to family-law jurisprudence, leveraging weak supervision and domain-adaptive pretraining on Indian judgments, and employing modular inference pipelines, the system enables cost-effective, jurisdiction-aware, and interpretable legal decision support. Subsequent chapters detail the architecture, training strategy, and evaluation framework designed to bridge these critical research gaps within realistic academic and infrastructural constraints.

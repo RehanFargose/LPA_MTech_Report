@@ -2,22 +2,26 @@
 \section{Background and Motivation}
 
 
-Due to the massive Population and issues with corruption, the Indian Judiciary has become woefully inefficient. Since, passing Judgements require one to look for Legal Precedents, the process is slowed down even further. Furthermore, due to the complicate Jargon used in Legal documents, it has often been inaccessible to the general public in India. There were over 44 million pending cases in the Indian courts in 2023\cite{b1}. Hence, there is need for a tool, specifically trained on Indian Legal Corpus that can help improve the efficiency of the Judiciary and also help the public understand the Nuances of the Legal landscape. 
+Due to the massive population and issues with corruption, the Indian judiciary has become woefully inefficient. Since, passing judgements require one to look for legal precedents, the process is slowed down even further. Furthermore, due to the complicate jargon used in legal documents, it has often been inaccessible to the general public in India. There were over 44 million pending cases in the Indian courts in 2023\cite{b1}. Hence, there is need for a tool, specifically trained on Indian legal corpus that can help improve the efficiency of the judiciary and also help the public understand the nuances of the legal landscape. 
 
-The dataset has been procured from AWS Registry for Indian Supreme court and High Court judgements in the form of court case docs(PDF format) and their associated metadata files(in .json format). These PDFs are then converted into texts, cleaned and their content is mapped to their metadata file to create an Indian Corpus dataset, that consist of the facts in the document. The facts include the IPC codes, Number of Judges, Acts, Disposal nature, Verdict label, etc.
+The dataset has been procured from AWS registry for Indian Supreme court and High court judgements in the form of court case docs(PDF format) and their associated metadata files(in .json format). These PDFs are then converted into texts, cleaned and their content is mapped to their metadata file to create an Indian legal judgement corpus dataset, that consist of the facts in the document. The facts include the IPC/BNS codes, number of judges, acts, disposal nature, verdict label, etc.
 
-Most of the existing NLP models for Legal Document processing such as LegalBERT, RoBERTA, DistillBERT, etc, are trained either on European, American or Chinese Legal corpus, thus making them difficult for use in the Indian Legal landscape. To combat this, we have proposed the development and design of a \textbf{Legal Precedent Assistant for Indian Judiciary}, focusing on Determining truth from presented evidence, IPC/BNS mapping, Summarization and Verdict Prediction.
+Most of the existing NLP models for Legal Document processing such as LegalBERT, RoBERTA, DistillBERT, etc, are trained either on European, American or Chinese legal corpus, thus making them difficult for use in the Indian Legal landscape. To combat this, we have proposed the development and design of a \textbf{Legal Precedent Assistant for Indian Family Courts}, focusing on determining truth from presented evidence, IPC/BNS mapping, summarization and verdict prediction.
 
-DAPT (Domain-Adaptive Pre-training) will be used in conjunction with Vector DB to train a Deepseek/Llama model or use an existing LLM such as Gemini/ChatGPT on the Indian Legal Corpus dataset. This model will then be finetuned further for our 5 stated goals. Since, the Indian Legal process is descended from the British Legal system, a trained LLM could be adapted/transferred from ECHR to IPC; provided we have a substantially large and refined dataset.
+DAPT (Domain-Adaptive Pre-training) will be used in conjunction with Vector DB to train a Deepseek/Llama model or use an existing LLM such as Gemini/ChatGPT on the Indian legal corpus dataset. This model will then be finetuned further for our 5 stated goals that will be part of a 5 stage pipeline. Since, the Indian legal process is descended from the British legal system, a trained LLM could be adapted/transferred from ECHR to IPC; provided we have a substantially large and refined dataset.
 
 A Vector Database such as Chroma DB with Streamlit for UI and the BAAI/bge-small-en-v1.5 model for creating vector embeddings can allow us to create a efficient RAG pipeline to act as external specialised memory for larger LLMs as smaller LLMs tend to have low context length which can fail to capture long Legal documents.
 
 The system will take case documents(Petitions, Evidence Affidavits, Responses, etc) in various formats(.pdf, .docx, .txt, etc) as input; convert, clean and translate into english text files and feed them to the 5 stage system pipeline. 
 
-The 1st stage is for Text Extraction, Translation(using NLLB model), and Vectorization. Utilizing tools such as pyMuPDF, Fitz, NLLB, and PyTesseract OCR, the system extracts, cleans, and translates raw input documents into text, which is then vectorized for ingestion into a Chroma DB vector database. The 2nd stage is for Document Fact Synthesis and IPC/BNS Mapping. By querying the cleaned text and vector DB metadata through integrated LLMs (Llama/DeepSeek/Gemini), the system identifies and stores applicable IPC/BNS sections to establish the foundational context for eventual verdict prediction. In parallel, the 3rd stage is for Evidence Scrutinization. The LLMs conduct a strict consistency audit against foundational documents (e.g., FIRs, Evidence Affidavits, CSRs, and DIRs), assigning a truth score based on contradictions found within either the appellant's or respondent's evidence. The 4th stage is for Precedent Retrieval, where the system queries Chroma DB to retrieve historically matching cases within the vector space, storing precedent metadata to further inform the predictive pipeline. The 5th stage is Verdict Prediction; leveraging the outputs from all previous stages—including contextual context \cite{b5}, section mappings, and retrieved precedents—the system predicts the trial outcome and generates a concise verdict sentence. The 6th and final stage is Summarization, where the system abstracts the predicted verdict sentence and overall case details into a simplified summary \cite{b3} of fewer than 150 words, systematically removing complex legal jargon.
+The 1st stage is for Text Extraction, Translation(using NLLB model), and Vectorization. Utilizing tools such as pyMuPDF, Fitz, NLLB, and PyTesseract OCR, the system extracts, cleans, and translates raw input documents into text, which is then vectorized for ingestion into a Chroma DB vector database. 
+The 2nd stage is for Document Fact Synthesis and IPC/BNS Mapping. By querying the cleaned text and vector DB metadata through integrated LLMs (Llama/DeepSeek/Gemini), the system identifies and stores applicable IPC/BNS sections to establish the foundational context for eventual verdict prediction. 
+In parallel, the 3rd stage is for Evidence Scrutinization. The LLMs conduct a strict consistency audit against foundational documents (e.g., FIRs, Evidence Affidavits, CSRs, and DIRs), assigning a truth score based on contradictions found within either the appellant's or respondent's evidence. 
+The 4th stage is for Precedent Retrieval, where the system queries Chroma DB to retrieve historically matching cases within the vector space, storing precedent metadata to further inform the predictive pipeline. 
+The 5th stage is Verdict Prediction; leveraging the outputs from all previous stages—including contextual context \cite{b5}, section mappings, and retrieved precedents—the system predicts the trial outcome and generates a concise verdict sentence. The 6th and final stage is Summarization, where the system abstracts the predicted verdict sentence and overall case details into a simplified summary \cite{b3} of fewer than 150 words, systematically removing complex legal jargon.
 
 
-The system can also take in Case documents in Marathi as well as Hindi, however, due to lack of specialized and established models for Indic languages their Prediction and Summarization capabilities would be greatly limited and more raw data and metadata would be required to improve this part of the system.
+The system can also take in Case documents in Marathi as well as Hindi, however, due to lack of specialized and established models for Indic language translation the downstream pipeline stage's capabilities would be greatly limited and more raw data and metadata alongside a better translation model would be required to improve this part of the system.
 
 
 \pagebreak
@@ -29,11 +33,11 @@ Despite growing interest in Legal NLP, current systems exhibit critical limitati
 \begin{enumerate}
     \item \textbf{Inefficient Token usage:} Commercial Legal NLP models, often rely heavily on LLMs, however this leads to massive costs for complicated court cases while also not taking into account Precedents, leading to inefficient token usage and poor result due to lacking context(due to absence of proper RAG Pipelines/Vector DB).
     
-    \item \textbf{Lack of Datasets:} Most BERT and Llama based Legal models are primarily trained on US and ECHR datasets, due to lack of large scale Indian legal corpus. Thus, there is a need to create datasets for Indian High Courts and District courts.
+    \item \textbf{Lack of Datasets:} Most BERT, Llama and Deepseek based Legal models are primarily trained on US, ECHR and chinese  datasets, and not on Indian legal corpus. Thus, there is a need to create datasets for Indian High Courts and District courts.
     
-    \item \textbf{Lack of Evidence Scrutiny:} Existing Legal models are used primarily for summarization or verdict prediction, they do not have the ability to distinguish between any contradictions based on the provided evidence/alibis and must treat the provided input as facts, which they cannot scrutinize.
+    \item \textbf{Lack of Evidence Scrutiny:} Existing Legal models are used primarily for summarization or verdict prediction, they do not have the ability to distinguish between any contradictions based on the provided evidence/alibis and must treat the provided input as hard facts, which they cannot scrutinize.
     
-    \item \textbf{Lack of Precedent in Verdict Prediction:} Existing models tend to utilise the statements and acts mentioned in the case documents and map them to IPC and predict a generalized sentence. However, this does not take into account established precedents (case law) for similar cases in the past to provide a verdict more relevant in the current context.
+    \item \textbf{Lack of Precedent in Verdict Prediction:} Existing models tend to utilise the statements and acts mentioned in the case documents and map them to IPC/BNS/Articles and predict a generalized sentence. However, this does not take into account established precedents (case law) for similar cases in the past to provide a verdict more relevant in the current context.
     
     \item \textbf{Limited Language Support:} Popular Legal NLP models are based on either English or Mandarin. Indic Language support is exceedingly rare due to the lack of dataset based on Indian legal corpus.
 \end{enumerate}
@@ -47,13 +51,13 @@ There exists a clear need for a thorough, efficient, multi-purpose, scalable, an
 The primary objective of this project is to design and validate a Legal NLP model that provides evidence scrutinization, verdict prediction, IPC/BNS mapping, simplified legal summary, etc using fine tuned legal models and data collected from SC, HC and various District courts in the state of Maharashtra. The specific research objectives are:
 
 \begin{enumerate}
-    \item \textbf{Legal Dataset Creation:} Develop a dataset of Indian Family courts based on Taluka, District and High court cases. The AWS registry provides Supreme court case documents in abundance, but not for High courts and District courts. The dataset should contain columns such as bench, IPC codes, disposal nature, case duration, verdict, arguments, evidence sections, etc.
+    \item \textbf{Legal Dataset Creation:} Develop a dataset of Indian Family courts based on SC, HC, District, and Family court cases. The AWS registry provides Supreme court case and some High court documents in abundance, but not for Family and District courts. The dataset should contain columns such as bench, IPC/BNS codes, disposal nature, case duration, verdict, arguments, evidence sections, etc.
     
-    \item \textbf{Evidence Scrutinization:} Develop a fine-tuned Llama model, that cross-references data and performs a consistency audit on the statements and evidence presented by both sides to detect any contradictions. This will allow the system to determine the truth and provide clear context to help with verdict prediction.
+    \item \textbf{Evidence Scrutinization:} Develop a model or a pipeline/system, that cross-references data and performs a consistency audit on the statements and evidence presented by both sides to detect any contradictions. Integrate a small fine-tuned model or a LLM. This will allow the system to determine the truth and provide clear context to help with verdict prediction.
     
-    \item \textbf{Precedent Search & Alignment:} Implement a Vector DB to allow the model to find caselaw/precedents which are similar to the current case, and take into account the context/precedent of retrieved precedents while providing a verdict.
+	\item \textbf{Precedent Search \& Alignment:} Implement a Vector DB to allow the model to find caselaw/precedents which are similar to the current case, and take into account the context/precedent of retrieved precedents while providing a verdict.
     
-    \item \textbf{IPC/BNS Mapping:} Implement NER to extrapolate the IPC/BNS applicable to the current case, based on the different sections of evidence, arguments, accusations, etc.
+    \item \textbf{IPC/BNS Mapping:} Implement NER/Regex to extrapolate the IPC/BNS applicable to the current case, based on the different sections of evidence, arguments, accusations, etc.
     
     \item \textbf{Verdict Prediction:} Predict the verdict while also taking into account Precedents(Case law), IPC/BNS mappings and the contradictions found in the evidence scrutiny.
     
@@ -67,9 +71,9 @@ The primary objective of this project is to design and validate a Legal NLP mode
 \subsection{In Scope}
 The model development encompasses:
 \begin{itemize}
-    \item Dataset building via data collected from Supreme, High and District courts, and filtering based on Family court cases.
+    \item Dataset building via data collected from SC, HC and District/Family courts, and filtering based on Family/Domestic court cases.
     \item Perform case evidence scrutinization on both sides using LLMs for consistency audit to find any contradictions.
-    \item Precedent search & retrieval via Vector DB.
+	\item Precedent search \& retrieval via Vector DB.
     \item IPC/BNS mapping using NER via Deepseek/Llama/Gemini.
     \item Verdict Prediction using Llama/Deepseek/Gemini.
     \item Summarization using Llama/Deepseek/Gemini.
@@ -81,11 +85,11 @@ The model development encompasses:
 The following are explicitly excluded from the current project phase:
 \begin{itemize}
     \item No support for niche Local languages.
-    \item Evidence scrutinization limited only to evidence and case docs provided as input.
+    \item Evidence scrutinization limited only to evidence and case docs provided as input as model cannot cross-question the involved parties.
     \item Consistency audit for evidence prone to LLM hallucinations.
     \item Only focused for Family court, only generic support for Criminal, Industrial, Copyright proceedings, etc.
-    \item Quality of dataset dependent upon raw data provided by Family/District/High courts.
-    \item Not meant to be used as a replacement for an actual Attorney/Lawyers/Judge.
+    \item Quality of dataset dependent upon raw data provided by SC/HC/Family/District courts.
+    \item Not meant to be used as a replacement for an actual Attorney/Lawyers/Judge/Counselors/Consultants.
     \item Verdict and summary might need to be reviewed, as the sentence passed might not have all the context/emotional considerations despite using Precedents.
     \item The Verdict is limited to what was shared with the model in the user's input documents.
 \end{itemize}
@@ -96,9 +100,9 @@ The remainder of this document is organized as follows:
 
 \textbf{Chapter~\ref{ch:lit_review} (Literature Review):} Presents a comprehensive synthesis of 23 research papers on Legal NLP models such as BERT, RoBERTa, Distill-BERT, BigBird, Legal-BERT, Legal-Llama, etc, using approaches such as DAPT (Domain Adaptive Pre-Training), Contrastive Learning, SCM (Similar Case Matching), UDA (Unsupervised Data Augmentation), DAM (Dual Attention Mechanism), etc. These existing systems primarily focus on summarizing, predicting verdicts, finding similar cases and named entity recognition (NER). This section includes tabular summary of key findings, gaps, and relevance, followed by systematic gap analysis identifying 15 specific research gaps across hardware, methodology, pedagogy, technical, and regulatory domains.
 
-\textbf{Chapter~\ref{ch:system_analysis} (System Analysis and Design):} Details functional and non-functional requirements derived from gap analysis and educational needs. Presents design alternatives comparison (DAPT+SCM) with justified selections. Includes system architecture, model parameter specifications, operational workflow, and design rationale explicitly mapping technical decisions to research gaps.
+\textbf{Chapter~\ref{ch:system_analysis} (System Analysis and Design):} Details functional and non-functional requirements derived from gap analysis and educational needs. Presents design alternatives comparison (DAPT+SCM/Vector DB) with justified selections. Includes system architecture, model parameter specifications, operational workflow, and design rationale explicitly mapping technical decisions to research gaps.
 
-\textbf{Chapter~\ref{ch:methodology} (Proposed Methodology):} Outlines six-phase development plan (Dataset building and refinement, Evidence scrutinization, IPC Mapping, Precedent search, Verdict prediction, Summarization) with deliverables, timelines, and evaluation metrics. Defines technical performance benchmarks, user experience measures, testing procedures, and risk mitigation strategies. 
+\textbf{Chapter~\ref{ch:methodology} (Proposed Methodology):} Outlines six-phase development plan (Dataset building and refinement, IPC/BNS Mapping, Precedent search, Evidence scrutinization,  Verdict prediction, Summarization) with deliverables, timelines, and evaluation metrics. Defines technical performance benchmarks, user experience measures, testing procedures, and risk mitigation strategies. 
 
 	extbf{References:} Comprehensive bibliography of cited literature using biblatex with consistent IEEE-style formatting.
 
