@@ -13,13 +13,14 @@ Based on the identified research gaps and Legal professional's needs, the system
 
 \textbf{FR1: Legal Document Input}
 \begin{itemize}
-    \item The legal documents/summaries from both sides should be given as input to the system alongside any pre-existing court judgements/summaries.
+    \item The relevant legal documents from both sides should be given as input to the system alongside any pre-existing court judgements.
     \item The files can be uploaded as .docx/.pdf/.txt formats.
 \end{itemize}
 
-\textbf{FR2: Text Cleaning and Preprocessing}
+\textbf{FR2: Translation, Text Cleaning and Preprocessing}
 \begin{itemize}
-    \item The system pipeline will then use regex/BERT models to remove any unnecessary symbols and patterns to convert the input documents into text files for further processing.
+    \item If the document is not in English it will be translated into English using a local model or Google Translate API. 
+    \item The system pipeline will then use regex to remove any unnecessary symbols and patterns to convert the input documents into text files for further processing.
 \end{itemize}
 
 \textbf{FR3: Evidence Scrutinization}
@@ -27,14 +28,15 @@ Based on the identified research gaps and Legal professional's needs, the system
     \item Gemini should be used to perform evidence scrutinization and a consistency audit for both sides, to try and determine contradictions in both side’s statements.
 \end{itemize}
 
-\textbf{FR4: IPC Mapping}
+\textbf{FR4: Legal code Mapping}
 \begin{itemize}
-    \item If the document contains any articles/code/IPC violations they should be tracked either based on the codes or based on statements or by using a vector db to match and extract relevant IPCs.
+    \item If the document contains any articles/code/IPC/BNS/section violations they should be tracked either based on the codes or based on statements or by using a vector db to match and extract relevant legal codes.
 \end{itemize}
 
 \textbf{FR5: Precedent Retrieval}
 \begin{itemize}
     \item Use a vector DB to match the current court case documents with past similar court cases and find precedents from past judgements to aid in verdict/judgement of present case.
+    \item To preserve token limit and balance performance use only the top 10 most relevant precedents.
 \end{itemize}
 
 \textbf{FR6: Verdict Prediction}
@@ -53,7 +55,7 @@ Based on the identified research gaps and Legal professional's needs, the system
 
 \textbf{NFR1: Cost Effectiveness}
 \begin{itemize}
-    \item Make use of freely available datasets, vector DBs, LLM models and LLM APIs.
+    \item Make use of freely available data(AWS SC/HC Registry) for building a judgements dataset, vector DBs(Chroma DB), LLM models and LLM APIs.
 \end{itemize}
 
 \textbf{NFR2: Usability and Accessibility}
@@ -83,14 +85,21 @@ Based on the identified research gaps and Legal professional's needs, the system
 \textbf{C1: GPU requirements}
 \begin{itemize}
     \item The current device uses a Notebook version of GTX 1650 gpu with 4Gb of VRAM.
-    \item This is sufficient to train smaller BERT/LLM models with small batch size but takes longer times and has low efficiency.
-    \item Solution: More advanced GPUs such as RTX series, or Ampere architecture based GPUs might be required based on the dataset procured.
+    \item This is sufficient to train smaller BERT/LLM models alognside PyMuPDF and NLLB(translation model) with small batch size but takes longer times and has low efficiency.
+    \item Solution: Consider following more advanced GPUs:
+    	\begin{itemize}
+    		\item RTX series GPUs.
+    		\item Ampere Architecture based GPUs.
+    		\item Free T4 GPU access from Google Collab and Kaggle(Preferred).
+    	\end{itemize}
+    	
+    	
 \end{itemize}
 
 \textbf{C2: VRAM/Memory Requirements}
 \begin{itemize}
-    \item The current device; GTX 1650 GPU has 4GB of VRAM, which is sufficient to train small to medium size BERT models provided Batching is used.
-    \item Solution: However, for LLMs like Llama 3 and above, we might require over 12GB of VRAM which is consequently tied to the GPU.
+    \item The current device; GTX 1650 GPU has 4GB of VRAM, which is sufficient to train small to medium size BERT models, NLLB(for translation) and BAAI-BG3-1.5B-en for vectorisation provided Batching is used.
+    \item Solution: For LLMs like Llama 3 and above, we might require over 12GB of VRAM which is consequently tied to the GPU.
     \item Solution: If powerful GPUs are not available, we can use CPU RAM as swap space/shared memory given that the project is being run on a Linux kernel.
 \end{itemize}
 
@@ -100,7 +109,7 @@ Based on the identified research gaps and Legal professional's needs, the system
 \subsection{Software and Performance Constraints}
 \textbf{C3: 512 token limit on BERT}
 \begin{itemize}
-    \item LegalBERT and its contemporaries have a strict 512 token limit.
+    \item Most smaller LLMs like Llama \& Deepseek 8B  and their contemporaries have a strict 512 token limit.
     \item Solution: This limit can be circumvented by using Sliding sequence window technique.
 \end{itemize}
 
@@ -156,9 +165,10 @@ Based on the identified research gaps and Legal professional's needs, the system
 Based on the requirements analysis and design trade-offs, the system objectives are:
 \begin{itemize}
     \item To design a modular, reliable and explainable Legal Precedent Assistant for Indian Family courts.
-    \item To create a Pipeline that takes court documents from both the opposing sides as inputs, cleans and pre-processes them and passes them to later stages for creating outputs in line with the functional and non-functional requirements.
-    \item To integrate LegalBERT for IPC mapping of any codes/articles/statements found in the input documents as well as retrieving legal precedents from past cases. 
-    \item To integrate Llama 3 for evidence scrutinization, verdict prediction and summarization of given court documents.
+    \item To create a Pipeline that takes court documents from both the opposing sides as inputs; cleans, translates and pre-processes them, passes them to later stages for creating outputs in line with the functional and non-functional requirements.
+    \item To integrate Llama/Gemini/Deepseek for Legal code mapping of any codes/articles/statements found in the input documents
+    \item To integrate a Vector DB for retrieving legal precedents from past cases. 
+    \item To integrate Gemini for evidence scrutinization, verdict prediction and summarization of given court documents.
     \item To create a system that can be transferred between different legal domains and not be constrained to just Family courts.
 \end{itemize}
 
@@ -178,7 +188,7 @@ Table~\ref{tab:comparative_analysis} compares the proposed system against existi
 
 Cost & NA & NA & NA & \$30 Million \\ \hline
 
-Model/Framework & Llama 3 and Legal-BERT via DAPT & Llama 3 and RAG & BERT and DAPT & Adversarial BERT and UDA \\ \hline
+Model/Framework & Llama/Deepseek via DAPT and/or Gemini + RAG & Llama 3 and RAG & BERT and DAPT & Adversarial BERT and UDA \\ \hline
 
 Target Audience & Professionals and Laymen & Legal Professionals & Legal Professionals & Legal Professionals \\ \hline
 
@@ -186,13 +196,13 @@ Customizability & High & Low & High & High \\ \hline
 
 Domain Transferability & High & Low & High & Medium \\ \hline
 
-Interpretability & Low & Low & Low & Low \\ \hline
+Interpretability & Medium & Low & Low & Low \\ \hline
 
 Language & English, Marathi, Hindi & Bangla, Arabic & Swedish, English, Norwegian & Mandarin \\ \hline
 
 Customizability & High (modular design) & High (open-source) & Low (proprietary) & Low (vendor lock-in) \\ \hline
 
-Regulatory Focus & RTO-aligned metrics & Research protocols & Entertainment & Commercial licensing \\ \hline
+Regulatory Focus & Family court aligned focus & Research protocols &  Commercial licensing & Commercial licensing \\ \hline
 
 \end{tabular}
 \end{table}
@@ -215,7 +225,7 @@ The proposed system architecture consists of two integrated subsystems designed 
 The physical control setup comprises:
 \begin{itemize}
     \item \textbf{CPU:} Any processors such as intel i5/i7 12th gen and above or Ryzen 5/7 are usable.
-    \item \textbf{GPU:} GTX 1650 or higher. RTX series GPUs with 12 GB VRAM or higher are preferred.
+    \item \textbf{GPU:} GTX 1650 or higher. RTX series/T4 GPUs with 12 GB VRAM or higher are preferred.
     \item \textbf{VRAM:} 4GB and higher.
 \end{itemize}
 
@@ -226,8 +236,13 @@ The physical control setup comprises:
 \begin{itemize}
     \item \textbf{Python 3.10:} Stable version with long term support and compatible with most hardware.
     \item \textbf{PyTorch CUDA:} For parallel computing to improve training and dataset pre-processing efficiency.
-    \item \textbf{Legal-BERT: } For initial stages of the system such as IPC/sections mapping, Precedent finding, etc.
-    \item \textbf{Llama 3:} For more complex stages such as Evidence scrutinization, Summarization, and Verdict prediction.
+	\item \textbf{Easy/Hybrid OCR:} For parallel pre-processing to build dataset from AWS Registry PDFs.
+    \item \textbf{NLLB: } For translation from other languages into English for downstream processes and vectorisation.
+    \item \textbf{BAAI/BG-3/1.5B-en: } For vectorisation of built dataset and any input documents for Vector DB.
+    \item \textbf{Llama 8B:} For more complex stages such as Evidence scrutinization, Summarization, and Verdict prediction.
+    \item \textbf{Deepseek R1 Distill 8B:} For more complex stages such as Evidence scrutinization, Summarization, and Verdict prediction.	
+    \item \textbf{Gemini API:} For more complex stages such as Evidence scrutinization, Summarization, and Verdict prediction.	
+       % \item \textbf{Legal-BERT: } For initial stages of the system such as IPC/sections mapping, Precedent finding, etc.
 \end{itemize}
 
 
