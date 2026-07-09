@@ -10,80 +10,78 @@ This chapter outlines the proposed development methodology, implementation phase
 
 \textbf{Tasks:}
 \begin{itemize}
-	\item Collect publicly available trial court and High Court judgments relevant to family law matters
-	\item Organize documents into structured storage (PDFs, metadata JSON, parquet indexes)
+	\item Collect publicly available trial court and High Court judgments relevant to family law matters from a Open Registry such as AWS, Hugging-Face, etc.
+	\item Organize documents into structured storage (PDFs, metadata JSON, parquet indexes).
 	\item Extract raw text from PDFs using Fitz (PyMuPDF)
-	\item Perform text cleaning: noise removal, normalization, OCR artifact correction
-	\item Segment documents into logical sections (facts, arguments, evidence, judgment)
-	\item Assign unique case identifiers and metadata tags (court, year, case type)
+	\item Perform text cleaning: noise removal, normalization, entity extraction using regex.
+	\item Segment documents into logical sections (facts, arguments, evidence, judgment).
+	\item Assign unique case identifiers and metadata tags (court, year, case type).
+	\item Collect real world family court cases for testing the system in later stages.
 \end{itemize}
 
 \textbf{Deliverables:}
 \begin{itemize}
-	\item Curated dataset of court judgments and supporting documents
-	\item Automated PDF-to-text preprocessing pipeline
-	\item Structured and cleaned legal text corpus
-	\item Data documentation and schema description
+	\item Curated dataset of court judgments and supporting documents.
+	\item Automated PDF-to-text preprocessing pipeline.
+	\item Structured and cleaned legal text corpus.
+	\item Data documentation and schema description.
 \end{itemize}
 
-\subsection{Phase 2: Legal Entity Recognition and IPC Mapping (Weeks 5--8)}
+\subsection{Phase 2:  DAPT and Model Fine-tuning (Weeks 5--8)}
 \textbf{Objective:} Identify legal entities and map relevant statutory provisions.
 
 \textbf{Tasks:}
 \begin{itemize}
-	\item Fine-tune Legal-BERT for named entity recognition on Indian legal text
-	\item Extract entities such as parties, dates, courts, IPC sections, and legal acts
-	\item Implement IPC and section classification module using supervised learning
-	\item Validate extraction accuracy against manually annotated samples
+	\item Fine-tune Llama \& Deepseek R1 models on dataset created in Stage 1 alongside a court reasoning dataset procured from hugging-face.
+	\item Not down the F1 score and Peplexity gains in all the models tested.
+	\item Feed one of the real world sample test cases to the models for testing and observe the model.
+	\item Validate accuracy of the various pipeline stages
 	\item Store extracted entities and mapped sections in structured form
 \end{itemize}
 
 \textbf{Deliverables:}
 \begin{itemize}
-	\item Trained Legal-BERT NER model
-	\item IPC/section mapping module
-	\item Evaluation report (precision, recall, F1-score)
-	\item Annotated validation dataset
+	\item Trained Legal-BERT NER model.
+	\item IPC/section mapping module.
+	\item Evaluation report (precision, recall, F1-score).
+	\item Annotated validation dataset.
 \end{itemize}
 
-\subsection{Phase 3: Evidence Scrutinization and Truth Scoring (Weeks 9--12)}
+\subsection{Phase 3: Evidence Scrutinization Module (Weeks 9--12)}
 \textbf{Objective:} Analyze evidence consistency and assign interpretive truth scores.
 
 \textbf{Tasks:}
 \begin{itemize}
-	\item Identify and align evidence statements from both parties
-	\item Implement contradiction detection using LLaMA 3 on segmented evidence blocks
-	\item Design heuristic-assisted truth scoring mechanism based on contradiction severity
-	\item Link evidence blocks to corresponding legal claims and sections
-	\item Generate explainable intermediate outputs for transparency
+	\item Feed the evidence affidavits of both sides to the model.
+	\item Implement contradiction detection using Llama, Deepseek R1 and Gemini on combined evidence blocks.
+	\item Note down the contradictions, alibis found by the model and contrast with the cross examination done by the lawyers.
+	\item Generate explainable intermediate outputs for transparency if possible.
 \end{itemize}
 
 \textbf{Deliverables:}
 \begin{itemize}
-	\item Evidence alignment and contradiction detection module
-	\item Truth score computation framework
-	\item Case-wise structured evidence representation
-	\item Qualitative validation on selected cases
+	\item Evidence alignment and contradiction detection module.
+	\item Case-wise structured evidence representation.
+	\item Qualitative validation on selected cases.
 \end{itemize}
 
 \subsection{Phase 4: Precedent Retrieval System (Weeks 13--16)}
-\textbf{Objective:} Retrieve legally similar past cases using semantic similarity.
+\textbf{Objective:} Retrieve legally similar past cases using Vector DB.
 
 \textbf{Tasks:}
 \begin{itemize}
-	\item Generate contextual embeddings using Legal-BERT
-	\item Construct vector database of precedent judgments
-	\item Implement Similar Case Matching (SCM) using approximate nearest neighbor search
-	\item Rank retrieved precedents based on factual similarity and applied IPC sections
-	\item Validate retrieval relevance using expert-reviewed samples
+	\item Convert the parquet dataset into embeddings/vectors using BAAI-BG3 model.
+	\item Construct vector database of precedent judgments by loading the vectors and indexing them in Chroma DB.
+	\item Feed the case documents to the system and use the top 10 most relevant cases as context for downstream tasks/phases.
+	\item Validate retrieval relevance using expert-reviewed samples.
 \end{itemize}
 
 \textbf{Deliverables:}
 \begin{itemize}
-	\item Precedent embedding index
-	\item SCM-based retrieval engine
-	\item Ranked precedent lists for test cases
-	\item Retrieval performance analysis
+	\item Vectorization script for Parquet dataset.
+	\item Chroma DB with all vectors loaded.
+	\item Ranked precedent lists for test cases.
+	\item Retrieval performance analysis.
 \end{itemize}
 
 \subsection{Phase 5: Verdict Prediction and Summarization (Weeks 17--20)}
@@ -91,19 +89,19 @@ This chapter outlines the proposed development methodology, implementation phase
 
 \textbf{Tasks:}
 \begin{itemize}
-	\item Integrate case facts, truth scores, IPC mappings, and precedents
-	\item Implement verdict and sentence prediction using LLaMA 3
-	\item Design prompt templates to minimize hallucination and ensure consistency
-	\item Generate simplified summaries under 150 words
-	\item Validate outputs against known case outcomes
+	\item Integrate case facts, evidence cross examination, law code mappings, and precedents.
+	\item Implement verdict and sentence prediction using LLMs.
+	\item Design prompt templates to minimize hallucination and ensure consistency and integrate Langchain for maintaining context and feasibilty of system.
+	\item Generate simplified summaries under 150 words.
+	\item Validate outputs against known case outcomes.
 \end{itemize}
 
 \textbf{Deliverables:}
 \begin{itemize}
-	\item Verdict and sentence prediction module
-	\item Simplified explanation generator
-	\item Case-wise prediction outputs
-	\item Error analysis and refinement report
+	\item Verdict and sentence prediction module.
+	\item Simplified explanation generator.
+	\item Case-wise prediction outputs.
+	\item Error analysis and refinement report.
 \end{itemize}
 
 \subsection{Phase 6: Evaluation, Refinement, and Documentation (Weeks 21--24)}
@@ -111,19 +109,19 @@ This chapter outlines the proposed development methodology, implementation phase
 
 \textbf{Tasks:}
 \begin{itemize}
-	\item Conduct quantitative evaluation (accuracy, precision, recall)
-	\item Perform qualitative case studies and expert review
-	\item Analyze model bias, failure cases, and limitations
-	\item Optimize pipeline efficiency and modularity
-	\item Prepare final documentation, diagrams, and thesis chapters
+	\item Conduct quantitative evaluation (accuracy, precision, recall).
+	\item Perform qualitative case studies and expert review.
+	\item Analyze model bias, failure cases, and limitations.
+	\item Optimize pipeline efficiency and modularity.
+	\item Prepare final documentation, diagrams, and thesis chapters.
 \end{itemize}
 
 \textbf{Deliverables:}
 \begin{itemize}
-	\item Comprehensive evaluation report
-	\item Refined end-to-end system pipeline
-	\item Final thesis documentation and figures
-	\item Deployment-ready prototype (academic)
+	\item Comprehensive evaluation report.
+	\item Refined end-to-end system pipeline.
+	\item Final thesis documentation and figures.
+	\item Deployment-ready prototype (academic).
 \end{itemize}
 
 
@@ -133,11 +131,11 @@ This chapter outlines the proposed development methodology, implementation phase
 \section{Evaluation Metrics}
 \subsection{Technical Performance Metrics}
 \begin{itemize}
-	\item \textbf{Text Extraction Accuracy:} Percentage of correctly extracted and readable text from judicial PDFs. Target: $>$ 95\% extraction success on digitally available judgments.
-	\item \textbf{Named Entity Recognition (NER) Performance:} Precision, recall, and F1-score for legal entities (parties, dates, IPC sections). Target: F1-score $>$ 0.85 on annotated validation set.
+	\item \textbf{Text Extraction Accuracy:} Percentage of correctly extracted and readable text from judicial PDFs. Target: $>$ 80\% extraction success on digitally available judgments.
+	\item \textbf{Initial Synthesis Performance:} Precision, recall, and F1-score for legal entities (parties, dates, law sections). Target: F1-score $>$ 0.85 on validation set.
 	\item \textbf{IPC / Section Mapping Accuracy:} Correct identification of applicable statutory provisions compared to ground truth judgments. Target: Accuracy $>$ 80\%.
 	\item \textbf{Precedent Retrieval Quality:} Top-$k$ retrieval relevance measured using Recall@$k$ (e.g., $k=5$). Target: Recall@5 $>$ 70\%.
-	\item \textbf{Inference Efficiency:} Average processing time per case for the full pipeline (excluding offline preprocessing). Target: $<$ 2 minutes per case in batch mode.
+	\item \textbf{Inference Efficiency:} Average processing time per case for the full pipeline (excluding offline preprocessing). Target: $<$ 2 minutes per case.
 \end{itemize}
 
 \subsection{Reasoning and Prediction Metrics}
@@ -145,7 +143,7 @@ This chapter outlines the proposed development methodology, implementation phase
 	\item \textbf{Verdict Prediction Accuracy:} Percentage of cases where predicted verdict matches actual outcome. Target: Accuracy $>$ 75\%.
 	\item \textbf{Sentence / Relief Prediction Error:} Deviation between predicted and actual sentencing outcomes or relief granted (where applicable). Target: Qualitative alignment in $>$ 70\% of evaluated cases.
 	\item \textbf{Evidence Consistency Score Validity:} Correlation between system-generated truth scores and expert-assessed evidence reliability. Target: Positive correlation ($r > 0.6$).
-	\item \textbf{Explainability Coverage:} Proportion of predictions accompanied by identifiable reasoning elements (mapped sections, precedents, evidence references). Target: 100\%.
+	\item \textbf{Explainability Coverage:} Proportion of predictions accompanied by identifiable reasoning elements (mapped sections, precedents, evidence references). Target: $>$ 80\%.
 \end{itemize}
 
 \subsection{Usability and Practical Relevance Metrics}

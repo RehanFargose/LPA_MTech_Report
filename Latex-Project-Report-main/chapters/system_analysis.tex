@@ -273,10 +273,10 @@ The design decisions documented in this chapter directly address the research ga
 
 \begin{itemize}
     \item \textbf{Gap 1 (Localized Context)} By training specifically on the Indian Legal Corpus (ILC) and incorporating IPC-specific logic, the model overcomes the "Geographic Bias" of existing systems that rely solely on US, EU, or Chinese legal data.
-    \item \textbf{Gap 2 (Long Document Handling):} The implementation of Hierarchical Transformers (or sliding-window techniques) directly addresses the 512-token limit of standard BERT models, allowing for the processing of verbose Indian High Court and Supreme Court judgments.
+    \item \textbf{Gap 2 (Long Document Handling):} The implementation of Hierarchical Transformers (or sliding-window techniques) directly addresses the 512-token limit of standard BERT models and small LLMs, allowing for the processing of verbose Indian High Court and Supreme Court judgments.
     \item \textbf{Gap 4 (Resource Efficiency):} The use of Domain Adaptive Pre-Training (DAPT) on specialized legal data ensures that the model achieves high F1 gains (up to 18.2\%) while remaining computationally lighter and more affordable than massive, general-purpose LLMs.
     \item \textbf{Gap 5 (Multi-task Integration):} The architecture combines Verdict Prediction, Case Summarization, and Statute Identification into a single pipeline, solving the limitation of fragmented systems that focus only on isolated subtasks like charge prediction.
-    \item \textbf{Gap 6 (Semantic Accuracy): }  By utilizing LegalBERT and Dual-Attention mechanisms, the system captures complex legal jargon and intra-sentence relationships that traditional "Bag of Words" or basic frequency models fail to retrieve.
+    \item \textbf{Gap 6 (Semantic Accuracy): }  By utilizing LLMs and Vector-DB, the system captures complex legal jargon and intra-sentence relationships that traditional "Bag of Words" or basic frequency models fail to retrieve.
 \end{itemize}
 
 The comparative analysis (Table~\ref{tab:comparative_analysis}) demonstrates that this design occupies a unique position: language flexibility, domain transferrability, efficient training at commercial-training affordability, specifically tailored for the Indian Legal landscape.
@@ -304,9 +304,9 @@ The workflow diagram (Figure~\ref{fig:workflow}) shows the sequential process of
 	
 	\item \textbf{Text Extraction \& Pre-processing:}
 	\begin{itemize}
-		\item PDFs are parsed using PyMuPDF/Fitz to extract raw text from judgments and evidence.
+		\item PDFs are parsed using Easy OCR/PyMuPDF/Fitz to extract raw text from judgments and evidence.
 		\item Text is cleaned (noise removal, normalization) and segmented into logical units (facts, arguments, evidence).
-		\item A LLM such as Deepseek R1(improved via DAPT) or Gemini is used to do initial synthesis of the documents.
+		\item An LLM such as Llama 8B, Deepseek R1(improved via DAPT) or Gemini is used to do initial synthesis of the documents.
 	\end{itemize}
 	
 	
@@ -370,16 +370,19 @@ The proposed Legal Precedent Assistant is technically feasible using current NLP
 	Judicial documents are primarily available as digitally generated or scanned PDFs. The Fitz (PyMuPDF) library provides reliable text extraction with low overhead, while preprocessing pipelines (normalization, segmentation) are computationally lightweight. Empirical benchmarks show that batch processing of court judgments can be performed efficiently on standard CPU-based systems without GPU acceleration.
 	
 	\item \textbf{Legal Entity Recognition and IPC Mapping:}
-	Legal-BERT, pre-trained on Indian legal corpora, is well-suited for named entity recognition and statutory provision classification. Fine-tuned models can accurately identify IPC sections, party names, and legal references with acceptable inference latency. Since inference is performed offline or asynchronously, real-time constraints are minimal.
+	LLMs, pre-trained on Indian legal corpora, is well-suited for named entity recognition and statutory provision classification. Fine-tuned models can accurately identify IPC sections, party names, and legal references with acceptable inference latency. Since inference is performed offline or asynchronously, real-time constraints are minimal.
 	
 	\item \textbf{Evidence Scrutinization and Reasoning:}
-	Contradiction detection and consistency auditing using LLaMA 3 are computationally intensive but feasible under a controlled pipeline. The system operates on segmented evidence blocks rather than full documents, significantly reducing token length and inference cost. Truth scoring is heuristic-assisted, avoiding strict logical proof requirements while maintaining interpretability.
+	Contradiction detection and consistency auditing using Gemini are computationally intensive but feasible under a controlled pipeline. The system operates on complete evidence docs to maintain context, significantly increasing token length and inference cost to maintain accuracy.
 	
 	\item \textbf{Precedent Retrieval and Similar Case Matching:}
-	Precedent retrieval is implemented using embedding-based Similar Case Matching (SCM). Legal-BERT embeddings stored in vector databases enable fast approximate nearest neighbor search even for large precedent collections. This approach scales linearly with data size and has been validated in prior legal IR research.
+	Precedent retrieval is implemented using a Vector Database such as Chroma DB. BAAI/BG-3 embeddings stored in vector databases enable fast approximate nearest neighbor search even for large precedent collections. This approach scales linearly with data size and has been validated in prior legal IR research.
 	
 	\item \textbf{Verdict Prediction and Summarization:}
-	Verdict and sentence prediction using LLaMA 3 leverages structured inputs (facts, mapped sections, precedents), reducing hallucination risk. Summarization under a fixed word limit is a well-established task for large language models and can be executed with deterministic decoding strategies to ensure consistency.
+	Verdict and sentence prediction using Gemini leverages structured inputs (facts, mapped sections, precedents), reducing hallucination risk. Summarization under a fixed word limit is a well-established task for large language models and can be executed with deterministic decoding strategies to ensure consistency.
+	
+	\item \textbf{Output Accuracy:}
+	Since the primary domain is Indian Family courts, the output from all the stages/Langchain prompts may not be fully accurate on account of an LLM not fully understanding the nuances of human relationships and emotions, in this regard a actual Human expert such as Judge, Lawyer, Attorney, etc, will always be preferred.
 \end{itemize}
 
 \textbf{Risk Assessment:}
@@ -467,25 +470,28 @@ A six-month development schedule is proposed, aligned with the academic calendar
 	\begin{tabular}{|l|l|p{6cm}|}
 		\hline
 		\textbf{Phase} & \textbf{Duration} & \textbf{Deliverables} \\ \hline
-		\textbf{Phase 1: Data Collection \& Preprocessing} & Weeks 1--4 & Curated dataset of trial and high court judgments; PDF-to-text pipeline using Fitz; cleaned and segmented legal text. \\ \hline
-		\textbf{Phase 2: Legal Entity Recognition \& IPC Mapping} & Weeks 5--8 & Fine-tuned Legal-BERT models for NER and IPC/section identification; validated extraction accuracy on sample cases. \\ \hline
-		\textbf{Phase 3: Evidence Scrutinization Module} & Weeks 9--12 & Contradiction detection and truth-scoring logic implemented using LLaMA 3; structured evidence representation. \\ \hline
-		\textbf{Phase 4: Precedent Retrieval System} & Weeks 13--16 & Embedding-based Similar Case Matching (SCM); vector database of precedents; ranked precedent retrieval. \\ \hline
-		\textbf{Phase 5: Verdict Prediction \& Summarization} & Weeks 17--20 & Verdict and sentence prediction pipeline using LLaMA 3; simplified summary generation under 150 words. \\ \hline
+		\textbf{Phase 1: Data Collection \& Preprocessing} & Weeks 1--4 & Curated dataset of trial and high court judgments; PDF-to-text pipeline using Fitz; cleaned and segmented legal text; collection of real word test samples from Lawyers. \\ \hline
+		\textbf{Phase 2: DAPT and Model Fine-tuning} & Weeks 5--8 & 
+		Perform DAPT on Llama and Deepseek R1 models and perform tests on them using sample documents. \\ \hline
+		\textbf{Phase 3: Evidence Scrutinization Module} & Weeks 9--12 & Contradiction detection and truth-scoring logic implemented using Gemini; structured evidence representation. \\ \hline
+		\textbf{Phase 4: Precedent Retrieval System} & Weeks 13--16 & Vector-Embedding-based retrieval; vector database of precedents; ranked precedent retrieval. \\ \hline
+		\textbf{Phase 5: Verdict Prediction \& Summarization} & Weeks 17--20 & Verdict and sentence prediction pipeline using Gemini; simplified summary generation under 150 words. \\ \hline
 		\textbf{Phase 6: Evaluation \& Refinement} & Weeks 21--24 & Quantitative evaluation (accuracy, precision, recall); qualitative case studies; system optimization and documentation. \\ \hline
 	\end{tabular}
 \end{table}
 
 \textbf{Critical Path Analysis:}
-The critical dependency chain progresses through reliable data preprocessing (Phase 1) → accurate IPC mapping (Phase 2) → evidence scrutinization (Phase 3). Errors in early-stage legal text processing propagate downstream and directly affect verdict prediction quality. Buffer time is allocated in Phase 6 to address cumulative model errors and integration issues.
+The critical dependency chain progresses through reliable data preprocessing (Phase 1) → DAPT and Model Fine-tuning (Phase 2) → evidence scrutinization (Phase 3). Errors in early-stage legal text processing propagate downstream and directly affect verdict prediction quality. Buffer time is allocated in Phase 6 to address cumulative model errors and integration issues.
 
 \textbf{Resource Availability:}
-The project is executed by a single postgraduate student with guidance from a faculty advisor. Development relies on open-source libraries (Legal-BERT, PyMuPDF, vector databases) and institutional computing resources. Model inference is scheduled offline or in batch mode, ensuring feasibility without continuous high-end GPU availability.
+The project is executed by a single postgraduate student with guidance from a faculty advisor. Development relies on open-source libraries (Legal-BERT, Hugging-Face, Llama, Deepseek, Kaggle, Google Collab, Chroma DB, NLLB, BAAI-BG, Streamlit UI, PyMuPDF/Fitz) and institutional computing resources. Model inference is scheduled offline or in batch mode, ensuring feasibility without continuous high-end GPU availability.
 
 \textbf{Schedule Risks:}
 \begin{itemize}
-	\item \textbf{Data Quality Issues:} Inconsistent formatting or OCR errors in court documents may delay Phase 1. Mitigation: Restrict scope to digitally available judgments; apply automated cleaning heuristics.
-	\item \textbf{Model Integration Complexity:} Coordinating multiple NLP models (Legal-BERT, LLaMA 3) may increase integration time. Mitigation: Modular pipeline design with independently testable components.
+	\item \textbf{Sample Data Procurement Issue:} Delay in procuring sample court data from Lawyers may delay Phase 6. 
+	Mitigation: Restrict scope to digitally available judgments.
+	\item \textbf{Data Quality Issues:} Inconsistent formatting or OCR errors in court documents may delay Phase 1. Mitigation: Restrict scope to digitally available judgments.
+	\item \textbf{Model Integration Complexity:} Coordinating multiple NLP models (Deepseek, LLaMA, NLLB) may increase integration time. Mitigation: Modular pipeline design with independently testable components.
 	\item \textbf{Evaluation Challenges:} Ground-truth verdict labels may be limited for certain case types. Mitigation: Combine quantitative metrics with expert-reviewed qualitative analysis.
 \end{itemize}
 
@@ -502,19 +508,22 @@ The proposed six-month schedule is feasible and well-aligned with academic const
 \textbf{Intellectual Property and Licensing:}
 \begin{itemize}
 	\item \textbf{Software Licensing:} 
-	The system is developed using open-source libraries and pretrained models such as Legal-BERT, PyMuPDF (Fitz), and vector database frameworks, all of which permit academic and research use under permissive licenses (e.g., Apache 2.0, MIT). The project is intended strictly for non-commercial academic purposes, ensuring compliance with licensing terms.
+	The system is developed using open-source libraries and pretrained models such as Llama, Deepseek, NLLB, PyMuPDF (Fitz), and Chroma DB, all of which permit academic and research use under permissive licenses (e.g., Apache 2.0, MIT). The project is intended strictly for non-commercial academic purposes, ensuring compliance with licensing terms.
 	
 	\item \textbf{Model Usage Rights:}
-	Pretrained language models (e.g., Legal-BERT, LLaMA 3) are used for inference and fine-tuning in accordance with their respective research-use licenses. No proprietary datasets or restricted commercial legal databases are incorporated, avoiding licensing conflicts.
+	Pretrained language models (e.g., Deepseek, LLaMA, Gemini API) are used for inference and fine-tuning in accordance with their respective research-use licenses. No proprietary datasets or restricted commercial legal databases are incorporated, avoiding licensing conflicts.
 	
 	\item \textbf{Original Contributions:}
-	The architectural design, truth-scoring heuristics, and pipeline integration constitute original academic work. While certain components (e.g., contradiction-aware verdict prediction) may have future commercial potential, no patent claims are pursued during the academic phase.
+	The architectural design, sample test data collection, evidence scrutinization, and pipeline integration constitute original academic work. While certain components (e.g., contradiction-aware verdict prediction) may have future commercial potential, no patent claims are pursued during the academic phase.
 \end{itemize}
 
 \textbf{Legal Compliance and Ethical Use:}
 \begin{itemize}
 	\item \textbf{Judicial Data Usage:}
 	Indian court judgments are public records and may be used for research and educational purposes. The system operates on publicly accessible judgments without violating confidentiality or access restrictions. Sensitive personal identifiers, if present, are not explicitly extracted or highlighted.
+	
+	\item \textbf{Sample Test Data Usage:}
+	Family court samples are used only to test and evaluate the system and are not to be used as part of the Training Database for LLMs nor as part of the Vector Database due to presence of sensitive and personally identifiable data.
 	
 	\item \textbf{Decision Support Disclaimer:}
 	The system is positioned as a legal decision-support and research aid, not as a substitute for judicial authority or professional legal advice. Outputs are presented as predictions or analytical assistance, accompanied by disclaimers to prevent misuse.
@@ -524,7 +533,7 @@ The proposed six-month schedule is feasible and well-aligned with academic const
 Case documents may contain personal or sensitive information. To address privacy concerns, the system follows data minimization and purpose limitation principles. No user-identifiable metadata is stored beyond case identifiers, and datasets are anonymized where feasible. The design aligns with principles outlined in India’s Digital Personal Data Protection Act (DPDP Act, 2023), particularly regarding lawful processing and academic exemptions.
 
 \textbf{Bias and Fairness Considerations:}
-Machine learning models trained on historical legal data may inherit systemic biases present in past judgments. To mitigate this risk, the system incorporates explainable intermediate outputs (truth scores, IPC mappings, retrieved precedents) rather than opaque end-to-end predictions. This supports transparency and allows human users to critically evaluate model outputs.
+NLP models trained on historical legal data may inherit systemic biases present in past judgments. To mitigate this risk, the system incorporates explainable intermediate outputs (evidence cross-examination, law code mappings, retrieved precedents) rather than opaque end-to-end predictions. This supports transparency and allows human users to critically evaluate model outputs.
 
 \textbf{Legal Verdict:}
 The project is legally and regulatorily feasible for academic research and prototyping. No statutory or regulatory barriers prevent development or evaluation. Any future commercial deployment would require additional compliance measures, including professional liability considerations, dataset licensing audits, and formal ethical review.
@@ -543,12 +552,12 @@ The project is legally and regulatorily feasible for academic research and proto
 	\begin{tabular}{|l|c|p{6.5cm}|}
 		\hline
 		\textbf{Feasibility Dimension} & \textbf{Rating} & \textbf{Key Justification} \\ \hline
-		Technical & High & Mature NLP models (Legal-BERT, LLaMA 3); modular pipeline; no real-time constraints apart from Dataset acquisiton. \\ \hline
+		Technical & Moderate-High & Mature NLP models (Legal-BERT, LLaMA 3); modular pipeline; no real-time constraints apart from Dataset acquisiton. \\ \hline
 		Economic & Very High & Open-source tools; no proprietary data costs; feasible on academic compute resources. \\ \hline
 		Operational & Moderate-High & Decision-support positioning; interpretability via intermediate outputs; expert oversight required. \\ \hline
 		Schedule & High & Realistic 6-month timeline with phased milestones and buffer for evaluation. \\ \hline
-		Legal \& Ethical & High & Uses public judicial data; DPDP-compliant design; clear non-advisory disclaimers. \\ \hline
+		Legal \& Ethical & Moderate & Uses public judicial data; DPDP-compliant design; clear non-advisory disclaimers. \\ \hline
 	\end{tabular}
 \end{table}
 
-The feasibility assessment indicates that the proposed Legal Precedent Assistant is \textbf{highly viable} across all critical dimensions. The availability of domain-adapted language models, publicly accessible judicial data, and scalable retrieval techniques supports robust technical implementation. Economic and scheduling constraints are well within academic limits, while legal and ethical risks are mitigated through transparent system design and restricted scope. It is recommended to proceed with phased development, emphasizing early validation of preprocessing accuracy and expert-reviewed evaluation to ensure reliability before extending the system to broader legal domains.
+The feasibility assessment indicates that the proposed Legal Precedent Assistant is \textbf{highly viable} across all critical dimensions. The availability of domain-adapted models, publicly accessible judicial data, and scalable retrieval techniques supports robust technical implementation. Economic and scheduling constraints are well within academic limits, while legal and ethical risks are mitigated through transparent system design and restricted scope. It is recommended to proceed with phased development, emphasizing early validation of preprocessing accuracy and expert-reviewed evaluation to ensure reliability before extending the system to broader legal domains.
