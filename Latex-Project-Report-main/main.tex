@@ -11,18 +11,34 @@
 \usepackage{amsmath} 
 \usepackage{amssymb}  
 \usepackage{graphicx}
-\usepackage{subcaption}       
+\usepackage{subcaption}        
 \usepackage{float}            
 \usepackage{caption}
- % define the title
-
 
 \begin{document}
+	
+	\pagenumbering{roman}
+	
+	% --- NEW FRONT MATTER START ---
+	\input{front/titilepage.tex}
+	\newpage
+	
+	\input{front/certificate.tex}
+	\newpage
+	
+	\input{front/Approval Sheet.tex} 
+	\newpage
+	
+	\input{front/Declaration.tex}
+	\newpage
+	
+	\input{front/Acknowledgement.tex}
+	\newpage
+	% --- NEW FRONT MATTER END ---
 
-\pagenumbering{roman}
 
-\input{front/cover.tex}
-\input{front/declaration.tex}
+
+
 
 \tableofcontents
 \addcontentsline{toc}{chapter}{Table of Contents}
