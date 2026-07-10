@@ -238,12 +238,60 @@ The physical control setup comprises:
     \item \textbf{PyTorch CUDA:} For parallel computing to improve training and dataset pre-processing efficiency.
 	\item \textbf{Easy/Hybrid OCR:} For parallel pre-processing to build dataset from AWS Registry PDFs.
     \item \textbf{NLLB: } For translation from other languages into English for downstream processes and vectorisation.
-    \item \textbf{BAAI/BG-3/1.5B-en: } For vectorisation of built dataset and any input documents for Vector DB.
+    \item \textbf{BAAI/bge-small-en-v1.5: } For vectorisation of built dataset and any input documents for Vector DB.
     \item \textbf{Llama 8B:} For more complex stages such as Evidence scrutinization, Summarization, and Verdict prediction.
     \item \textbf{Deepseek R1 Distill 8B:} For more complex stages such as Evidence scrutinization, Summarization, and Verdict prediction.	
     \item \textbf{Gemini API:} For more complex stages such as Evidence scrutinization, Summarization, and Verdict prediction.	
        % \item \textbf{Legal-BERT: } For initial stages of the system such as IPC/sections mapping, Precedent finding, etc.
 \end{itemize}
+
+
+
+\newpage
+\section{Data Pipeline Methodology}
+\label{sec:data_pipeline_methodology}
+
+Figure~\ref{fig:data_pipeline} illustrates the data flow and component interactions within the LPA system.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{figs/DB_Detailed_Flow.pdf}
+	\caption{End-to-End RAG Legal Data Pipeline Architecture[cite: 203].}
+	\label{fig:data_pipeline}
+\end{figure}
+
+The system utilizes a specialized end-to-end RAG pipeline to transform raw judicial PDFs into an intelligent retrieval environment. The process is structured into four distinct stages:  
+\begin{enumerate}
+	\item \textbf{Ingestion \& Cleaning:} Raw legal PDFs from the AWS SC+HC Registry (1990-2025) are processed via multi-threaded execution using the script \texttt{batch\_converter.ipynb}. This stage leverages \textbf{PyMuPDF/Fitz} to extract raw text, which is then refined using regular expressions (regex) for structural noise removal.
+	\item \textbf{Data Structuring:} Extracted text files and their corresponding JSON metadata files—which include details such as coram, date, and case numbers are merged using \textbf{parquet-creator-1990-2025.ipynb}. This compiles a consolidated Parquet dataset table to facilitate efficient data representation and entity fingerprinting.
+	\item \textbf{Vectorization:} The structured Parquet dataset  undergoes recursive chunking and AI model vector embedding using parallel multi-GPU execution via \texttt{vector-embeddings.ipynb}. It employs the \textbf{BAAI/bge-small-en-v1.5} modelto generate a raw embeddings package consisting of a vector matrix (\texttt{sc\_vectors.npy}) and a textual payload (\texttt{sc\_payload.json}).
+	\item \textbf{Retrieval \& Inference:} At runtime, the Streamlit application framework \texttt{my\_app.py} acts as the system builder and server. It encodes incoming user queries using the identical BAAI embedding model  to execute cosine similarity calculations against the persistent index stored in the \textbf{ChromaDB} vector database collection. This pipeline isolates and retrieves the top 10 most contextually relevant precedents to stage them for final LLM synthesis.
+\end{enumerate}
+
+
+
+
+\newpage
+\section{Data Governance and Ethical Sourcing}
+\label{sec:data_governance_ethical_sourcing}
+
+Figure~\ref{fig:pipeline_architecture} outlines the corresponding structural data flow and runtime search query paths interacting with the storage sub-systems.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{figs/DB_Pipeline_Architecture.pdf}
+	\caption{Data Flow and Storage Subsystem Architecture.}
+	\label{fig:pipeline_architecture}
+\end{figure}
+
+To ensure complete architectural integrity, compliance, and user safety within the Legal Precedent Assistant (LPA) framework, the following data governance and ethical sourcing protocols are implemented across the pipeline:
+\begin{itemize}
+	\item \textbf{Public Judicial Corpus Sourcing:} The historical retrieval corpus is constructed exclusively using public records obtained via the AWS Registry for Supreme Court and High Court judgments covering the years 1990–2025. This baseline retrieval dataset complies with standard public information access parameters and academic research data exemptions.
+	\item \textbf{Expert Legal Validation:} Structural pipeline rules, logic frameworks, and evidence cross-examination parameters were evaluated and calibrated using real-world qualitative inputs and target test samples collected directly from practicing legal professionals.
+	\item \textbf{Strict Isolation of Private Test Samples:} While actual case records and validation samples were gathered from legal counsel to evaluate edge-case pipeline reliability, these documents are strictly restricted to transient runtime testing. They are completely excluded from the permanent ChromaDB vector store index and are never utilized during model domain-adaptive pre-training (DAPT) or fine-tuning stages. This procedural boundary eliminates the risk of leaking sensitive personal data or violating non-disclosure expectations in sensitive family matters.
+	\item \textbf{Algorithmic Transparency:} To prevent ungrounded model hallucinations, the pipeline rejects end-to-end opaque logic. The core reasoning engines (Llama, Deepseek, Gemini) are restricted by strict prompt anchoring to force explicit source citations. Every predicted verdict, structural summary, or legal code mapping must display its explicit underlying source parameters retrieved from the verified database index.
+\end{itemize}
+
 
 
 
@@ -260,12 +308,7 @@ Figure~\ref{fig:system_architecture} illustrates the data flow and component int
     \label{fig:system_architecture}
 \end{figure}
 
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=0.95\textwidth]{figs/model_diagram.pdf}
-%    \caption{System model diagram illustrating the conceptual architecture and relationships between core system components.}
-%    \label{fig:model_diagram}
-%\end{figure}
+
 
 \section{Design Rationale Summary}
 

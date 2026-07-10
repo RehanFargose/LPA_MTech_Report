@@ -8,7 +8,7 @@ The dataset has been procured from AWS registry for Indian Supreme court and Hig
 
 Most of the existing NLP models for Legal Document processing such as LegalBERT, RoBERTA, DistillBERT, etc, are trained either on European, American or Chinese legal corpus, thus making them difficult for use in the Indian Legal landscape. To combat this, we have proposed the development and design of a \textbf{Legal Precedent Assistant for Indian Family Courts}, focusing on determining truth from presented evidence, IPC/BNS mapping, summarization and verdict prediction.
 
-DAPT (Domain-Adaptive Pre-training) will be used in conjunction with Vector DB to train a Deepseek/Llama model or use an existing LLM such as Gemini/ChatGPT on the Indian legal corpus dataset. This model will then be finetuned further for our 5 stated goals that will be part of a 5 stage pipeline. Since, the Indian legal process is descended from the British legal system, a trained LLM could be adapted/transferred from ECHR to IPC; provided we have a substantially large and refined dataset.
+DAPT (Domain-Adaptive Pre-training) will be used in conjunction with Vector DB to train a Deepseek/Llama model or use an existing LLM such as Gemini/ChatGPT on the Indian legal corpus dataset. This model will then be finetuned further for our 5 stated goals that will be part of a 5 stage pipeline that will utilise Langchain. Since, the Indian legal process is descended from the British legal system, a trained LLM could be adapted/transferred from ECHR to IPC; provided we have a substantially large and refined dataset.
 
 A Vector Database such as Chroma DB with Streamlit for UI and the BAAI/bge-small-en-v1.5 model for creating vector embeddings can allow us to create a efficient RAG pipeline to act as external specialised memory for larger LLMs as smaller LLMs tend to have low context length which can fail to capture long Legal documents.
 
@@ -74,7 +74,7 @@ The model development encompasses:
     \item Dataset building via data collected from SC, HC and District/Family courts, and filtering based on Family/Domestic court cases.
     \item Perform case evidence scrutinization on both sides using LLMs for consistency audit to find any contradictions.
 	\item Precedent search \& retrieval via Vector DB.
-    \item IPC/BNS mapping using NER via Deepseek/Llama/Gemini.
+    \item IPC/BNS mapping using NER via Regex/Deepseek/Llama/Gemini.
     \item Verdict Prediction using Llama/Deepseek/Gemini.
     \item Summarization using Llama/Deepseek/Gemini.
     \item Indic language support available for Hindi and Marathi.
@@ -87,7 +87,7 @@ The following are explicitly excluded from the current project phase:
     \item No support for niche Local languages.
     \item Evidence scrutinization limited only to evidence and case docs provided as input as model cannot cross-question the involved parties.
     \item Consistency audit for evidence prone to LLM hallucinations.
-    \item Only focused for Family court, only generic support for Criminal, Industrial, Copyright proceedings, etc.
+    \item Only focused for Family court, minimal support for Criminal, Industrial, Copyright proceedings, etc.
     \item Quality of dataset dependent upon raw data provided by SC/HC/Family/District courts.
     \item Not meant to be used as a replacement for an actual Attorney/Lawyers/Judge/Counselors/Consultants.
     \item Verdict and summary might need to be reviewed, as the sentence passed might not have all the context/emotional considerations despite using Precedents.
@@ -104,7 +104,14 @@ The remainder of this document is organized as follows:
 
 \textbf{Chapter~\ref{ch:methodology} (Proposed Methodology):} Outlines six-phase development plan (Dataset building and refinement, IPC/BNS Mapping, Precedent search, Evidence scrutinization,  Verdict prediction, Summarization) with deliverables, timelines, and evaluation metrics. Defines technical performance benchmarks, user experience measures, testing procedures, and risk mitigation strategies. 
 
-	extbf{References:} Comprehensive bibliography of cited literature using biblatex with consistent IEEE-style formatting.
+\textbf{Chapter~\ref{ch:results} (Results):} 
+Details the evaluation process and discusses the results of DAPT and Fine-tuning BERT models/Small LLMs on multiple datasets. Also provides output and review of all the stages of the proposed system pipeline. 
+
+\textbf{Chapter~\ref{ch:conclusion} (Conclusion \& Future Work):} 
+Provides a conclusive summary of unique contribution, limitations of proposed model and future scope for the same.
+ 
+
+\textbf{References:} Comprehensive bibliography of cited literature using biblatex with consistent IEEE-style formatting.
 
 This structured presentation aims to provide both academic rigor through literature grounding and practical feasibility through detailed technical planning, positioning the project for successful implementation and potential contribution to the Indian legal landscape.
 
